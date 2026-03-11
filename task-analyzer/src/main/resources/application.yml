@@ -1,35 +1,40 @@
 server:
-  port: 7073
+  port: 7071
 
 spring:
+  application:
+    name: task-analyzer
   profiles:
     active: hadoop
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   datasource:
-    url: jdbc:mysql://localhost:33066/compass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: ${DB_URL:jdbc:mysql://localhost:3306/compass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
     druid:
       initial-size: 5
       min-idle: 10
       max-active: 20
+  # Redis: single node (no cluster). Used only for task-detect's delayed queue.
+  # RedisConsumer (parser) is disabled; parsing is now done in-process via AnalyzerBridge.
   redis:
     host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
     password: ${REDIS_PASSWORD:}
     lettuce:
       pool:
-        max-active: 16
-        max-idle: 8
-        min-idle: 2
+        max-active: 8
+        max-idle: 4
+        min-idle: 1
   opensearch:
     nodes: ${OPENSEARCH_NODES:localhost:9200}
     username: ${OPENSEARCH_USERNAME:}
     password: ${OPENSEARCH_PASSWORD:}
     truststore:
     truststore-password:
+    # OpenSearch index prefixes (from task-parser)
     log-prefix: "compass-log-summary-"
     detector-prefix: "compass-detector-app-"
     gc-prefix: "compass-gc-log-"
@@ -37,25 +42,79 @@ spring:
     task-app-prefix: "compass-task-app-"
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    listener:
+      type: batch
+      ack-mode: MANUAL_IMMEDIATE
+    consumer:
+      enable-auto-commit: false
+      max-poll-records: 50   # increased from 1 for throughput
+    # topic for publishing parsed log results to task-gpt
     topic: "task-gpt"
 
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
 custom:
-  redisConsumer:
+  schedulerType: ${SCHEDULER:dolphinscheduler}
+
+  # Detect settings (from task-detect)
+  kafka:
+    consumer:
+      group-id: cp-analyzer-task
+      topic-name: task-instance
+      auto:
+        start: true
+
+  detect:
+    threadPoolSize: 10
+  detectionRule:
+    durationWarning: 2       # hours
+    alwaysFailedWarning: 10  # days
+
+  # Delayed task queue for retrying tasks with pending applicationIds
+  delayedTaskQueue:
     enable: true
-    maxThreadPoolSize: 10
-    logRecordList: "{lua}:log:record"
-    processingHash: "{lua}:parser:processing"
-    scheduled:
-      cron: "0/2 * * * * ?"
-      limitTime: 2 # Unit: hour
-      limitCount: 2 # number of count
+    delayedSeconds: 10
+    tryTimes: 5
+  redis:
+    delayedQueue: "{lua}:delayed:task"
+    processing: "{lua}:detected:processing"
+
+  # Parser settings (from task-parser)
+  parser:
+    maxConcurrentParsers: 10
+
+  # RedisConsumer DISABLED: parsing is now done in-process via AnalyzerBridge.
+  # Setting enable=false prevents RedisConsumer from starting.
+  redisConsumer:
+    enable: false
+
+  opensearch:
+    yarn-app-index: "compass-yarn-app"
+    spark-app-index: "compass-spark-app"
+    job-index: "compass-job-analysis"
+    app-index: "compass-task-app"
+    job-instance-index: "compass-job-instance"
+
   jvmType:
     - Java HotSpot
     - OpenJDK
-  # Spark event log check parameters
-  # disable default: false, set it true to disable this detection item.
+
+  # Detector thresholds (from task-parser)
   detector:
-    # spark
     sparkEnvironmentConfig:
       jvmInformation:
         - Java Version
@@ -73,103 +132,62 @@ custom:
     speculativeTaskConfig:
       disable: false
       threshold: 20
-      # app duration(ms)
       duration: 300000
     memWasteConfig:
       disable: false
       threshold: 70
-      # app duration(ms)
       duration: 300000
     cpuWasteConfig:
       disable: false
-      # app duration(ms)
       duration: 300000
       driverThreshold: 50
       executorThreshold: 50
     jobDurationConfig:
       disable: false
       threshold: 30
-      # job duration(ms)
       duration: 300000
     stageDurationConfig:
       disable: false
       threshold: 30
-      # stage duration(ms)
       duration: 300000
     taskDurationConfig:
       disable: false
       threshold: 10
-      # app duration(ms)
       duration: 300000
     hdfsStuckConfig:
       disable: false
       threshold: 10
-      # MB
       taskSize: 10
-      # task duration(ms)
       duration: 300000
     globalSortConfig:
       disable: false
       taskCount: 1
       records: 50000000
-      # task duration
       duration: 1200000
     largeTableScanConfig:
       disable: false
       scanTable: 50000000000
-      # app duration(ms)
       duration: 1200000
     oomWarnConfig:
       disable: false
       oom: 40
-      # app duration(ms)
       duration: 1200000
       broadcastRows: 5000000
       broadcastRowsOom: 30
     dataSkewConfig:
       disable: false
-      # app duration(ms)
       duration: 1200000
-      # stage耗时/任务总耗时
       stageDurationPercentage: 20
       interval:
-        # 0w-5w
-        - start: 0
-          end: 50000
-          threshold: 0
-        # 5w-10w
-        - start: 50000
-          end: 100000
-          threshold: 100
-        # 10w-100w
-        - start: 100000
-          end: 1000000
-          threshold: 50
-        # 100w-500w
-        - start: 1000000
-          end: 5000000
-          threshold: 10
-        # 500w-2000w
-        - start: 5000000
-          end: 20000000
-          threshold: 5
-        # 2000w-3000w
-        - start: 20000000
-          end: 30000000
-          threshold: 3.5
-        # 3000w-4000w
-        - start: 30000000
-          end: 40000000
-          threshold: 3
-        # 4000w-5000w
-        - start: 40000000
-          end: 50000000
-          threshold: 2.25
-        # 5000w
-        - start: 50000000
-          end: 0
-          threshold: 2
-    # mapreduce
+        - {start: 0, end: 50000, threshold: 0}
+        - {start: 50000, end: 100000, threshold: 100}
+        - {start: 100000, end: 1000000, threshold: 50}
+        - {start: 1000000, end: 5000000, threshold: 10}
+        - {start: 5000000, end: 20000000, threshold: 5}
+        - {start: 20000000, end: 30000000, threshold: 3.5}
+        - {start: 30000000, end: 40000000, threshold: 3}
+        - {start: 40000000, end: 50000000, threshold: 2.25}
+        - {start: 50000000, end: 0, threshold: 2}
     mrEnvironmentConfig:
       keys:
         - mapreduce.map.cpu.vcores
@@ -181,7 +199,6 @@ custom:
       disable: false
       mapThreshold: 80
       reduceThreshold: 80
-      # task duration(ms)
       duration: 1200000
     mrLargeTableScanConfig:
       disable: false
@@ -189,13 +206,10 @@ custom:
       duration: 1200000
     mrDataSkewConfig:
       disable: false
-      # MB
       taskSize: 500
-      # task duration(ms)
       taskDuration: 900000
       mapThreshold: 2
       reduceThreshold: 2
-      # app duration(ms)
       duration: 1200000
     mrSpeculativeTaskConfig:
       disable: false
@@ -203,15 +217,17 @@ custom:
       duration: 1200000
     mrTaskDurationConfig:
       disable: false
-      # task duration(ms)
       taskDuration: 900000
       mapThreshold: 2
       reduceThreshold: 2
-      # app duration(ms)
       duration: 1200000
     mrGCConfig:
       disable: false
       mapThreshold: 0.1
       reduceThreshold: 0.1
-      # app duration(ms)
       duration: 1200000
+
+spark:
+  io:
+    compression:
+      codec: ""

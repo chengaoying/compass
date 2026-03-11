@@ -9,9 +9,9 @@ spring:
       pool:
         size: 10
   redis:
-    cluster:
-      nodes: localhost:6379
-    password:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
 
   opensearch:
     nodes: localhost:19527

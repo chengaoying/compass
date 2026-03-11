@@ -1,0 +1,85 @@
+server:
+  port: 7070
+
+spring:
+  application:
+    name: task-collector
+  # Activate scheduler-specific profile (dolphinscheduler|airflow|custom) + hadoop profile
+  profiles:
+    active: dolphinscheduler,hadoop
+  task:
+    scheduling:
+      pool:
+        size: 10
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/compass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USERNAME:}
+    password: ${DB_PASSWORD:}
+    druid:
+      initial-size: 5
+      min-idle: 10
+      max-active: 20
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    topics: "task-instance"
+    consumer:
+      group-id: "cp-task-collector"
+      auto-offset-reset: "earliest"
+      max-poll-interval-ms: 300000
+    taskApplicationTopic: "task-application"
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 4
+        min-idle: 1
+  opensearch:
+    nodes: ${OPENSEARCH_NODES:localhost:9200}
+    username: ${OPENSEARCH_USERNAME:}
+    password: ${OPENSEARCH_PASSWORD:}
+    truststore:
+    truststore-password:
+    yarn-app-prefix: "compass-yarn-app-"
+    spark-app-prefix: "compass-spark-app-"
+
+mybatis:
+  mapper-locations:
+    - classpath:dao/*.xml
+    - classpath*:com/**/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+# Delayed task queue (from task-application): retry tasks with pending applicationIds
+custom:
+  delayedTask:
+    enable: true
+    queue: "{lua}:task:application"
+    processing: "{lua}:task-processing"
+    delayedSeconds: 5
+    tryTimes: 20
+
+# Scheduled metadata polling (from task-metadata)
+scheduler:
+  clusterMeta:
+    enable: true
+    cron: "0 */30 * * * ?"
+  yarnMeta:
+    enable: true
+    cron: "0/30 * * * * ?"
+    startedTimeBegin: 6    # hours
+  sparkMeta:
+    enable: true
+    cron: "0/30 * * * * ?"
+    limitCount: 1000

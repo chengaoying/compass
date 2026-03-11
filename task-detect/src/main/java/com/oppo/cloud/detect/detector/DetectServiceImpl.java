@@ -16,12 +16,12 @@
 
 package com.oppo.cloud.detect.detector;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oppo.cloud.analyzer.bridge.AnalyzerBridge;
 import com.oppo.cloud.common.domain.opensearch.JobAnalysis;
 import com.oppo.cloud.common.domain.opensearch.SimpleUser;
 import com.oppo.cloud.common.domain.job.App;
 import com.oppo.cloud.common.domain.job.LogRecord;
-import com.oppo.cloud.common.service.RedisService;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.detect.domain.AbnormalTaskAppInfo;
 import com.oppo.cloud.detect.service.*;
@@ -66,19 +66,13 @@ public abstract class DetectServiceImpl implements DetectService {
     private AbnormalJobService abnormalJobService;
 
     @Autowired
-    private RedisService redisService;
+    private AnalyzerBridge analyzerBridge;
 
     @Autowired
     public TaskInstanceService taskInstanceService;
 
     @Autowired
     private JobInstanceService jobInstanceService;
-
-    /**
-     * Parsing message transmission through a Redis queue.
-     */
-    @Value("${custom.redis.logRecord}")
-    private String logRecordQueue;
 
     /**
      * Task diagnosis
@@ -173,11 +167,12 @@ public abstract class DetectServiceImpl implements DetectService {
     }
 
     /**
-     * Send LogRecord
+     * Send LogRecord directly to parser (in-process call, no Redis queue).
+     * Replaces the previous Redis lLeftPush → RedisConsumer pattern.
      */
     public void sendLogRecordMsg(LogRecord logRecord) {
-        Long size = redisService.lLeftPush(logRecordQueue, JSONObject.toJSONString(logRecord));
-        log.info("send logRecord: key:{}, size:{}, data:{}", logRecordQueue, size, logRecord);
+        log.info("analyzeLogRecord id={}", logRecord.getId());
+        analyzerBridge.analyze(logRecord);
     }
 
     /**

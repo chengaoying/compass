@@ -35,9 +35,9 @@ spring:
     truststore:
     truststore-password:
   redis:
-    cluster:
-      nodes: localhost:6379
-    password:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
   jackson: # serialize & deserialize time zone.
     time-zone: Asia/Shanghai
 
@@ -46,7 +46,16 @@ mybatis:
     - classpath:dao/*.xml
     - classpath*:com/**/mapper/*.xml
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
 
 custom:
   opensearch:
@@ -87,8 +96,10 @@ custom:
     logRecordKey: "{lua}:log:record"
 
   jwt:
-    expireDay: 15
-    secret: 8ff3bf2c8344
+    expireDay: ${JWT_EXPIRE_DAYS:15}
+    # JWT secret MUST be set via environment variable JWT_SECRET (min 32 chars).
+    # Never hardcode secrets in configuration files.
+    secret: ${JWT_SECRET}
 
 spark:
   io:

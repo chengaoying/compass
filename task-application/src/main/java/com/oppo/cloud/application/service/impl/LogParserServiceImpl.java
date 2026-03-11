@@ -16,8 +16,7 @@
 
 package com.oppo.cloud.application.service.impl;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oppo.cloud.application.config.CustomConfig;
 import com.oppo.cloud.application.config.HadoopConfig;
 import com.oppo.cloud.application.config.KafkaConfig;
@@ -72,6 +71,9 @@ public class LogParserServiceImpl implements LogParserService {
      */
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /**
      * task application table management
@@ -191,7 +193,7 @@ public class LogParserServiceImpl implements LogParserService {
             }
         }
         // get all information of task instance
-        taskInstance = new JSONObject(data).toJavaObject(TaskInstance.class);
+        taskInstance = objectMapper.convertValue(data, TaskInstance.class);
 
         int count = 0;
         List<String> logPathList = new ArrayList<>();
@@ -261,7 +263,7 @@ public class LogParserServiceImpl implements LogParserService {
 
         try {
             messageProducer.sendMessageSync(kafkaConfig.getProducerTopics(),
-                    JSON.toJSONString(taskApplication));
+                    objectMapper.writeValueAsString(taskApplication));
         } catch (Exception ex) {
             log.error("failed to send insert data to kafka, err: " + ex.getMessage());
         }
@@ -329,11 +331,14 @@ public class LogParserServiceImpl implements LogParserService {
          */
         public RetCode extract() throws Exception {
             if (!StringUtils.isBlank(rule.getLogPathDep().getQuery())) {
-                String sql = StringUtil.replaceParams(rule.getLogPathDep().getQuery(), data);
-                log.info("extract SQL:{}, data:{}", sql, data);
+                // Use parameterized query to prevent SQL injection
+                Object[] paramResult = StringUtil.toParameterizedQuery(rule.getLogPathDep().getQuery(), data);
+                String sql = (String) paramResult[0];
+                Object[] args = (Object[]) paramResult[1];
+                log.info("extract SQL:{}", sql);
                 Map<String, Object> depData = null;
                 try {
-                    depData = jdbcTemplate.queryForMap(sql);
+                    depData = jdbcTemplate.queryForMap(sql, args);
                 } catch (Exception e) {
                     log.error(e.getMessage());
                     return RetCode.RET_EXCEPTION;

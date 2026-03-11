@@ -10,27 +10,40 @@
     <packaging>pom</packaging>
     <version>${revision}</version>
     <modules>
+        <!-- Core library modules -->
         <module>task-mbg</module>
         <module>task-common</module>
-        <module>task-parser</module>
-        <module>task-portal</module>
-        <module>task-metadata</module>
-        <module>task-detect</module>
+
+        <!-- Active service modules -->
+        <module>task-analyzer</module>   <!-- merged: task-detect + task-parser -->
+        <module>task-collector</module>  <!-- merged: task-application + task-metadata -->
         <module>task-syncer</module>
-        <module>task-application</module>
-        <module>task-canal</module>
-        <module>task-canal-adapter</module>
+        <module>task-portal</module>
+        <module>task-gpt</module>
+
+        <!-- Optional: Flink real-time diagnosis -->
         <module>task-flink-core</module>
         <module>task-flink</module>
+
+        <!-- Optional: Canal CDC adapter (needed only when scheduler DB is not directly accessible) -->
+        <module>task-canal</module>
+        <module>task-canal-adapter</module>
+
+        <!-- Frontend and packaging -->
         <module>task-ui</module>
-        <module>task-gpt</module>
         <module>task-assembly</module>
+
+        <!-- DEPRECATED: kept for reference, replaced by task-analyzer and task-collector -->
+        <!-- <module>task-detect</module>   -->
+        <!-- <module>task-parser</module>   -->
+        <!-- <module>task-application</module> -->
+        <!-- <module>task-metadata</module> -->
     </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
+        <version>3.2.4</version>
         <relativePath/>
     </parent>
 
@@ -48,7 +61,7 @@
         <spring-data-commons.version>2.4.5</spring-data-commons.version>
         <spring-dynamic-datasource.version>3.1.0</spring-dynamic-datasource.version>
         <jjwt.version>0.9.0</jjwt.version>
-        <javax-servlet.version>4.0.1</javax-servlet.version>
+        <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
         <junit-jupiter>5.8.2</junit-jupiter>
         <commons-pool2.version>2.11.1</commons-pool2.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
@@ -57,9 +70,11 @@
         <maven-surefire-report.version>2.19.1</maven-surefire-report.version>
         <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
         <curator.version>4.2.0</curator.version>
+        <!-- ZooKeeper retained only for Canal HA. Kafka now uses KRaft mode (no ZooKeeper). -->
         <zookeeper.version>3.7.1</zookeeper.version>
         <kafka-clients.version>3.4.0</kafka-clients.version>
-        <fastjson2.version>2.0.23</fastjson2.version>
+        <mybatis-plus.version>3.5.6</mybatis-plus.version>
+        <micrometer-prometheus.version>1.12.4</micrometer-prometheus.version>
         <guava.version>31.1-jre</guava.version>
         <hadoop.version>3.3.4</hadoop.version>
         <log4j.version>2.17.2</log4j.version>
@@ -67,7 +82,7 @@
         <mockito.version>4.3.1</mockito.version>
         <swagger.version>3.0.0</swagger.version>
         <spotless.version>2.27.2</spotless.version>
-        <opensearch.version>1.3.12</opensearch.version>
+        <opensearch.version>2.13.0</opensearch.version>
         <java-jwt.version>4.2.2</java-jwt.version>
         <assembly.skip>true</assembly.skip>
         <derby.version>10.14.2.0</derby.version>
@@ -236,10 +251,18 @@
                 <version>${spring-kafka.version}</version>
             </dependency>
 
+            <!-- FastJSON2 removed: use Jackson (Spring Boot default) for all JSON serialization -->
+
             <dependency>
-                <groupId>com.alibaba.fastjson2</groupId>
-                <artifactId>fastjson2</artifactId>
-                <version>${fastjson2.version}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer-prometheus.version}</version>
             </dependency>
 
             <dependency>
@@ -255,9 +278,9 @@
             </dependency>
 
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${javax-servlet.version}</version>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta-servlet.version}</version>
             </dependency>
 
             <dependency>
@@ -523,9 +546,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <testFailureIgnore>true</testFailureIgnore>
-                </configuration>
+                <!-- testFailureIgnore removed: test failures now block the build (quality gate restored) -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

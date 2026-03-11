@@ -16,7 +16,7 @@
 
 package com.oppo.cloud.detect.task;
 
-import com.alibaba.fastjson2.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oppo.cloud.common.constant.TaskStateEnum;
 import com.oppo.cloud.common.domain.opensearch.JobAnalysis;
 import com.oppo.cloud.common.domain.syncer.TableMessage;
@@ -61,6 +61,9 @@ public class DetectedTask {
     @Autowired
     private BlocklistService blocklistService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @KafkaListener(topics = "${custom.kafka.consumer.topic-name}", groupId = "${custom.kafka.consumer.group-id}", autoStartup = "${custom.kafka.consumer.auto.start}")
     public void consumerTask(@Payload List<String> tableChangeMessages, Acknowledgment ack) {
         for (String message : tableChangeMessages) {
@@ -69,14 +72,14 @@ public class DetectedTask {
                 log.info("message:{}", message);
                 TableMessage tableMessage;
                 try {
-                    tableMessage = JSON.parseObject(message, TableMessage.class);
+                    tableMessage = objectMapper.readValue(message, TableMessage.class);
                 } catch (Exception e) {
                     log.error("parse kafka message failed, error msg:{}, kafka message:{}", e.getMessage(), message);
                     continue;
                 }
                 TaskInstance taskInstance;
                 try {
-                    taskInstance = JSON.parseObject(tableMessage.getBody(), TaskInstance.class);
+                    taskInstance = objectMapper.readValue(tableMessage.getBody(), TaskInstance.class);
                 } catch (Exception e) {
                     log.error("parse taskInstance message failed, error msg:{}, kafka message:{}", e.getMessage(),
                             tableMessage.getBody());

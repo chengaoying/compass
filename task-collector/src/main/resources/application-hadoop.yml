@@ -1,0 +1,18 @@
+# Hadoop cluster configuration (configure your actual cluster details here)
+hadoop:
+  namenodes:
+    - nameservices: logs-hdfs
+      namenodesAddr: [ "host1", "host2" ]
+      namenodes: [ "namenode1", "namenode2" ]
+      user: ${HDFS_USER:hdfs}
+      password: ${HDFS_PASSWORD:}
+      port: 8020
+      matchPathKeys: [ "flume" ]
+
+  yarn:
+    - clusterName: "bigdata"
+      resourceManager: [ "${YARN_RM_HOST:localhost}:8088" ]
+      jobHistoryServer: "${JOB_HISTORY_HOST:localhost}:19888"
+
+  spark:
+    sparkHistoryServer: [ "${SPARK_HISTORY_HOST:localhost}:18018" ]
