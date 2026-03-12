@@ -22,8 +22,10 @@ export SPRING_DATASOURCE_PASSWORD="postgres"
 # Kafka
 export SPRING_KAFKA_BOOTSTRAPSERVERS="kafka:9092"
 
-# Redis
-export SPRING_REDIS_CLUSTER_NODES="redis1:6379,redis2:6380,redis3:6381"
+# Redis (single node, matching compose.yml)
+export REDIS_HOST="redis"
+export REDIS_PORT="6379"
+export SPRING_REDIS_CLUSTER_NODES="redis:6379"
 # Optional
 export SPRING_REDIS_PASSWORD=""
 

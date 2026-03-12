@@ -13,11 +13,15 @@ if [ -f ${ENV_SH} ]; then
   done
 fi
 
-# copy hadoop conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-application/conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-metadata/conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-parser/conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-flink/conf
+# copy hadoop conf to modules that need it
+HADOOP_CONF="${HOME_DIR}/conf/application-hadoop.yml"
+if [ -f "${HADOOP_CONF}" ]; then
+  for target_dir in task-collector task-analyzer task-flink; do
+    if [ -d "${HOME_DIR}/${target_dir}/conf" ]; then
+      cp "${HADOOP_CONF}" "${HOME_DIR}/${target_dir}/conf/"
+    fi
+  done
+fi
 
 TASK_CANAL_ENABLE=${TASK_CANAL_ENABLE:-"True"}
 
