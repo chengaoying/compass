@@ -325,14 +325,7 @@ INSERT INTO `task_diagnosis_advice` VALUES
 (38,'yarn',NULL,'systemTimesError','时间同步异常','服务器时间同步问题，建议任务重试','.*System times on machines may be out of sync.*$',NULL,'otherException',0,'未检测到异常'),
 (39,'scheduler',NULL,'otherError','其他错误信息','该类错误未分类',NULL,NULL,'otherException',0,'未检测到异常'),
 (40,'event',NULL,'broadcastOOM','广播过滤行数过多','执行sql中广播过滤行数：{maxRows} ,内存占比：{usePercent}%。<br/>该任务广播过滤行数超过{broadcastRows}且该任务被广播的表与driver或executor任意一个内存占比已超过阈值{broadcastRowsOom}%，存在OOM内存溢出风险，建议提前增加相应内存，禁用广播或取消强制广播。<br/>禁用广播参数为：--hiveconf livy.session.conf.spark.sql.autoBroadcastJoinThreshold=-1;<br/>增加内存参数为（增加当前内存的20%）：（executor内存） --hiveconf livy.session.conf.spark.executor.memory;（driver内存）--hiveconf livy.session.conf.spark.driver.memory;<br/>如果非强制广播的情况下，spark2对是否广播判断有一定概率失误，建议切换到spark3。',NULL,'maxRows,usePercent,broadcastRows,broadcastRowsOom','oomWarn',0,'未检测到异常'),
-(41,'driver',NULL,'outOfMemoryError','内存溢出','适当增加driver内存',NULL,NULL,'memoryOverflow',0,NULL),
-(42, 'mrJobHistory', NULL, 'mrLargeTableScan', 'MR大表扫描', '表的扫描量{values}，超过阈值{threshold}行，发生大表扫描。', NULL, 'threshold,values', 'mrLargeTableScan', 0, '未检测到异常'),
-(43, 'mrJobHistory', NULL, 'mrMemoryWaste', 'MR内存浪费', '{memoryWaste}。 建议适当减少内存大小，优化成本', NULL, 'memoryWaste', 'mrMemoryWaste', 0, '未检测到异常'),
-(44, 'mrJobHistory', NULL, 'mrDataSkew', 'MR数据倾斜', ' {dataSkewInfo}。{taskType}处理的数据量严重超过中位值，发生数据倾斜。', NULL, 'dataSkewInfo', 'mrDataSkew', 0, '未检测到异常'),
-(45, 'mrContainer', NULL, 'otherError', '其他错误信息', '该类错误未分类', NULL, NULL, 'otherException', 0, '未检测到异常'),
-(46, 'mrJobHistory', NULL, 'mrSpeculativeTask', 'MR推测执行过多', '推测执行数量为：{values}，其中{attemptId}最大耗时为：{maxElapsedTime}', NULL, 'values,threshold', 'mrSpeculativeTask', 0, '未检测到异常'),
-(47, 'mrJobHistory', NULL, 'mrTaskDurationAbnormal', 'MRTask长尾', '{taskDurationInfo}，{taskType}的最大运行耗时远远大于中位值，发生Task耗时异常。', NULL, 'taskDurationInfo', 'mrTaskDurationAbnormal', 0, '未检测到异常'),
-(48, 'mrJobHistory', NULL, 'mrGCAbnormal', 'MRGC异常', '{mrGCAbnormal}', NULL, 'mrGCAbnormal', 'mrGCAbnormal', 0, '未检测到异常');
+(41,'driver',NULL,'outOfMemoryError','内存溢出','适当增加driver内存',NULL,NULL,'memoryOverflow',0,NULL);
 
 -- en_US
 
@@ -377,11 +370,4 @@ INSERT INTO `task_diagnosis_advice` VALUES
 --(38,'yarn',NULL,'systemTimesError','Time synchronization exception','Server time synchronization problem, it is recommended to retry the task','.*System times on machines may be out of sync.*$',NULL,'otherException',0,'No exception detected'),
 --(39,'scheduler',NULL,'otherError','Other error information','This type of error is uncategorized',NULL,NULL,'otherException',0,'No exception detected'),
 --(40,'event',NULL,'broadcastOOM','Broadcast filtering exceeds limit','Broadcast filter rows in SQL: {maxRows}, memory occupancy:{usePercent}%.<br/>This task has broadcasted rows greater than {broadcastRows} and the memory occupancy of the table being broadcasted by the driver or executor has exceeded the threshold of {broadcastRowsOom}%, there is a risk of OOM memory overflow. It is recommended to increase the corresponding memory in advance, disable broadcasting or cancel forced broadcasting. <br/>Disable broadcasting parameter is: --hiveconf livy.session.conf.spark.sql.autoBroadcastJoinThreshold=-1; <br/>Add memory parameter (increase current memory by 20%): (executor memory)--hiveconf livy.session.conf.spark.executor.memory; (driver memory) --hiveconf livy.session.conf.spark.driver.memory;<br/>If there is not force broadcasting, there is a certain probability for spark2 to misjudge whether to broadcast or not. It is recommended to switch to spark3.',NULL,'maxRows,usePercent,broadcastRows,broadcastRowsOom','oomWarn',0,'No exception detected'),
---(41,'driver',NULL,'outOfMemoryError','Memory overflow','Increase driver memory properly',NULL,NULL,'memoryOverflow',0,NULL),
---(42, 'mrJobHistory', NULL, 'mrLargeTableScan', 'MR big table scanning', 'Scanning amount of table {values} exceeded the threshold of {threshold} rows, causing big table scanning.', NULL, 'threshold,values', 'mrLargeTableScan', 0, 'No exception detected'),
---(43, 'mrJobHistory', NULL, 'mrMemoryWaste', 'MR memory waste', '{memoryWaste}. It is recommended to reduce the memory size appropriately and optimize costs.', NULL, 'memoryWaste', 'mrMemoryWaste', 0, 'No exception detected'),
---(44, 'mrJobHistory', NULL, 'mrDataSkew', 'MR data skewness', ' {dataSkewInfo}. The amount of data processed by {taskType} exceeds the median value, resulting in data skewness.', NULL, 'dataSkewInfo', 'mrDataSkew', 0, 'No exception detected'),
---(45, 'mrContainer', NULL, 'otherError', 'Other error information', 'This type of error is uncategorized', NULL, NULL, 'otherException', 0, 'No exception detected'),
---(46, 'mrJobHistory', NULL, 'mrSpeculativeTask', 'Too many MR speculative executions', 'The number of speculative executions is: {values}, among which {attemptId} has the longest elapsed time: {maxElapsedTime}.', NULL, 'values,threshold', 'mrSpeculativeTask', 0, 'No exception detected'),
---(47, 'mrJobHistory', NULL, 'mrTaskDurationAbnormal', 'MR task with long tail', '{taskDurationInfo}, the maximum running time of {taskType} is much longer than the median value, resulting in Task time abnormality.', NULL, 'taskDurationInfo', 'mrTaskDurationAbnormal', 0, 'No exception detected'),
---(48, 'mrJobHistory', NULL, 'mrGCAbnormal', 'MR GC abnormality', '{mrGCAbnormal}', NULL, 'mrGCAbnormal', 'mrGCAbnormal', 0, 'No exception detected');
+--(41,'driver',NULL,'outOfMemoryError','Memory overflow','Increase driver memory properly',NULL,NULL,'memoryOverflow',0,NULL);

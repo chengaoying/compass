@@ -14,7 +14,7 @@ const tableColumn = [
   { label: t('common.creator'), value: 'users' },
 ]
 let taskAppInfo: any = $ref({})
-const placeholderText =t('common.inputPlaceholder') + 'spark/mapreduce application id'
+const placeholderText =t('common.inputPlaceholder') + 'spark application id'
 async function submit() {
   if (!applicationId)
     return ElMessage.warning(t('common.inputPlaceholder') + 'applicationId')
