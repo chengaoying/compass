@@ -19,11 +19,11 @@ The overall architecture is divided into 3 layers:
 
 Specific module process stages:
 
-- Data Collection Stage: The task-canal/adapter module subscribes to synchronize the user, DAG, job, execution record and other workflow metadata of the scheduling system to the diagnostic platform; the task-metadata module periodically synchronizes Yarn ResourceManager, Spark HistoryServer App metadata to the diagnostic system, associating log storage paths, as a basis for subsequent data processing stages;
+- Data Collection Stage: The task-canal/adapter module subscribes to synchronize the user, DAG, job, execution record and other workflow metadata of the scheduling system to the diagnostic platform; the task-collector module periodically synchronizes Yarn ResourceManager and Spark HistoryServer App metadata to the diagnostic system, associating log storage paths and task applicationIds with HDFS log paths, as a basis for subsequent data processing stages;
 
-- Data Association and Model Standardization Stage: The task-syncer module standardizes the synchronized data into User, Project, Flow, Task, TaskInstance models; the task-application module associates workflow layer and engine layer metadata;
+- Data Association and Model Standardization Stage: The task-syncer module standardizes the synchronized data into User, Project, Flow, Task, TaskInstance models;
 
-- Workflow Layer & Engine Layer Anomaly Detection Stage: At this point, the standard data model has been obtained, and further Workflow anomaly detection processes are carried out for the standard model. The task-detect module performs workflow layer anomaly task detection, such as `Failed task`, `Abnormal time-elapsed task`, etc.; the task-parser module performs engine layer anomaly task detection, such as `Failed SQL task`, `Shuffle failed task`, etc.; the task-flink module performs flink job resource and anomaly detection, such as `Low CPU usage`, `Low memory usage`, etc.;
+- Workflow Layer & Engine Layer Anomaly Detection Stage: At this point, the standard data model has been obtained, and further Workflow anomaly detection processes are carried out for the standard model. The task-analyzer module performs both workflow layer anomaly detection (e.g. `Failed task`, `Abnormal time-elapsed task`) and engine layer log parsing and anomaly detection (e.g. `Failed SQL task`, `Shuffle failed task`); the task-flink module performs flink job resource and anomaly detection, such as `Low CPU usage`, `Low memory usage`, etc.;
 
 - Business View: The task-portal module provides user report overview, one-click diagnosis, workflow layer task diagnosis, engine layer job Application diagnosis, diagnostic suggestions and detailed reports, whitelist and other functions.
 

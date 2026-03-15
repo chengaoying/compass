@@ -33,11 +33,6 @@
         <module>task-ui</module>
         <module>task-assembly</module>
 
-        <!-- DEPRECATED: kept for reference, replaced by task-analyzer and task-collector -->
-        <!-- <module>task-detect</module>   -->
-        <!-- <module>task-parser</module>   -->
-        <!-- <module>task-application</module> -->
-        <!-- <module>task-metadata</module> -->
     </modules>
 
     <parent>
@@ -127,18 +122,6 @@
 
             <dependency>
                 <groupId>com.oppo.cloud</groupId>
-                <artifactId>task-detect</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.oppo.cloud</groupId>
-                <artifactId>task-metadata</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.oppo.cloud</groupId>
                 <artifactId>task-portal</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -155,11 +138,6 @@
                 <version>${revision}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.oppo.cloud</groupId>
-                <artifactId>task-parser</artifactId>
-                <version>${revision}</version>
-            </dependency>
             <dependency>
                 <groupId>com.oppo.cloud</groupId>
                 <artifactId>task-flink-core</artifactId>

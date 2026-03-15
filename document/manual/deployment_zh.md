@@ -146,7 +146,7 @@ fi
 
 ```
 hadoop:
-  # task-applicaiton & task-parser 模块配置依赖
+  # task-collector & task-analyzer 模块配置依赖
   namenodes:
     - nameservices: logs-hdfs               # dfs.nameservices 属性值
       namenodesAddr: [ "machine1.example.com", "machine2.example.com" ]   # dfs.namenode.rpc-address.[nameservice ID].[name node ID] 属性值
@@ -154,7 +154,7 @@ hadoop:
       user: hdfs                            # 用户
       password:                             # 密码，如果没开启鉴权，则不需要
       port: 8020                            # 端口
-      matchPathKeys: [ "flume" ]            # task-application模块使用，调度平台日志hdfs路径关键字
+      matchPathKeys: [ "flume" ]            # task-collector模块使用，调度平台日志hdfs路径关键字
       # kerberos
       enableKerberos: false
       # /etc/krb5.conf
@@ -166,7 +166,7 @@ hadoop:
       # /var/kerberos/krb5kdc/admin.keytab
       keytabPath: ""
   
-  # task-metadata 模块配置依赖
+  # task-collector 模块配置依赖
   yarn:
     - clusterName: "bigdata"
       resourceManager: [ "ip:port" ] # yarn.resourcemanager.webapp.address 属性值
