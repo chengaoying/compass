@@ -24,7 +24,6 @@ public enum LogGroupType {
     SCHEDULER("scheduler"),
 
     SPARK("spark"),
-    MAPREDUCE("mapreduce"),
 
     YARN("yarn");
 

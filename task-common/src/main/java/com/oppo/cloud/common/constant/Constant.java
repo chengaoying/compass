@@ -51,19 +51,6 @@ public class Constant {
      * NM_REMOTE_APP_LOG_DIR_SUFFIX
      */
     public static final String JHS_HDFS_SUFFIX_PATH = "jhs:hdfs:suffix:path:";
-    /**
-     * yarn.app.mapreduce.am.staging-dir
-     */
-    public static final String JHS_MAPREDUCE_STAGING_PATH = "jhs:mapreduce:staging:path:";
-    /**
-     * mapreduce.jobhistory.done-dir
-     */
-    public static final String JHS_MAPREDUCE_DONE_PATH = "jhs:mapreduce:done:path:";
-    /**
-     * mapreduce.jobhistory.intermediate-done-dir
-     */
-    public static final String JHS_MAPREDUCE_INTERMEDIATE_DONE_PATH = "jhs:mapreduce:intermediate:done:path:";
-
     public static final String HDFS_SCHEME = "hdfs://";
 
 }

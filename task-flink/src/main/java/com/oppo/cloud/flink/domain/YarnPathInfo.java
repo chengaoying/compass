@@ -29,19 +29,4 @@ public class YarnPathInfo {
      * yarn.nodemanager.remote-app-log-dir
      */
     private String remoteDir;
-
-    /**
-     * yarn.app.mapreduce.am.staging-dir
-     */
-    private String mapreduceStagingDir;
-
-    /**
-     * mapreduce.jobhistory.done-dir
-     */
-    private String mapreduceDoneDir;
-
-    /**
-     * mapreduce.jobhistory.intermediate-done-dir
-     */
-    private String mapreduceIntermediateDoneDir;
 }

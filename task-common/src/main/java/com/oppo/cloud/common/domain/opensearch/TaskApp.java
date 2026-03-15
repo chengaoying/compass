@@ -21,7 +21,6 @@ import com.oppo.cloud.common.constant.ApplicationType;
 import com.oppo.cloud.common.constant.Constant;
 import com.oppo.cloud.common.domain.cluster.spark.SparkApp;
 import com.oppo.cloud.common.domain.cluster.yarn.YarnApp;
-import com.oppo.cloud.common.domain.mr.MRJobHistoryLogPath;
 import com.oppo.cloud.common.service.RedisService;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.common.util.LogPathUtil;
@@ -117,15 +116,6 @@ public class TaskApp extends OpenSearchInfo {
     @ApiModelProperty(value = "Yarn container log path")
     private String yarnLogPath;
 
-    @ApiModelProperty(value = "MR job history done path")
-    private String jobHistoryDoneLogPath;
-
-    @ApiModelProperty(value = "MR job history intermediate done path")
-    private String jobHistoryIntermediateDoneLogPath;
-
-    @ApiModelProperty(value = "MR job history staging path")
-    private String jobHistoryStagingLogPath;
-
     @ApiModelProperty(value = "AM host")
     private String amHost;
 
@@ -200,12 +190,6 @@ public class TaskApp extends OpenSearchInfo {
         if (sparkApp != null) {
             this.eventLogPath = LogPathUtil.getSparkEventLogPath(sparkApp.getEventLogDirectory(), this.applicationId,
                     sparkApp.getAttemptId(), yarnApp.getState(), sparkCompressionCodec);
-        }
-        if (ApplicationType.MAPREDUCE.getValue().equals(yarnApp.getApplicationType())) {
-            MRJobHistoryLogPath mrJobHistoryLogPath = LogPathUtil.getMRJobHistoryDoneLogPath(yarnApp, redisService);
-            this.jobHistoryDoneLogPath = mrJobHistoryLogPath.getDoneLogPath();
-            this.jobHistoryIntermediateDoneLogPath = mrJobHistoryLogPath.getIntermediateDoneLogPath();
-            this.jobHistoryStagingLogPath = mrJobHistoryLogPath.getStagingLogPath();
         }
 
         String yarnLogPath = LogPathUtil.getYarnLogPath(Constant.JHS_HDFS_PATH, yarnApp.getIp(), redisService);

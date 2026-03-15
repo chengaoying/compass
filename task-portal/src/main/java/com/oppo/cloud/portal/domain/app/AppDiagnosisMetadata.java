@@ -52,10 +52,6 @@ public class AppDiagnosisMetadata {
 
     private String sparkExecutorLogDirectory;
 
-    private String mapreduceEventLogDirectory;
-
-    private String mapreduceContainerLogDirectory;
-
     private String diagnostics;
 
     private String queue;
