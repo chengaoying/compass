@@ -34,6 +34,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * JdbcPollingConsumer: Canal-free alternative for syncing scheduler metadata.
@@ -48,13 +49,17 @@ import java.util.*;
  *
  * <p>Poll interval: configurable via {@code custom.syncer.jdbc.pollIntervalMs} (default: 5000ms).
  *
- * <p>Idempotency: each polled record is processed only once because the poll window advances
- * monotonically. Duplicate processing on restart is bounded to the last poll window.
+ * <p>Circuit breaker: after {@code FAILURE_THRESHOLD} consecutive failures, polling is suspended
+ * for exponentially increasing intervals (up to {@code MAX_BACKOFF_MS}).
  */
 @Slf4j
 @Component
 @ConditionalOnProperty(prefix = "custom.syncer", name = "mode", havingValue = "jdbc")
 public class JdbcPollingConsumer {
+
+    private static final int FAILURE_THRESHOLD = 3;
+    private static final long INITIAL_BACKOFF_MS = 5_000L;
+    private static final long MAX_BACKOFF_MS = 300_000L; // 5 minutes
 
     @Autowired
     private DataSourceConfig dataSourceConfig;
@@ -74,6 +79,10 @@ public class JdbcPollingConsumer {
     /** Tracks the last successfully polled timestamp per scheduler table */
     private final Map<String, Date> lastPolledTime = new HashMap<>();
 
+    /** Circuit breaker state */
+    private final AtomicInteger consecutiveFailures = new AtomicInteger(0);
+    private volatile long circuitOpenUntil = 0L;
+
     /**
      * Poll all configured table mappings for new/updated records.
      * Runs every {@code custom.syncer.jdbc.pollIntervalMs} milliseconds.
@@ -83,13 +92,50 @@ public class JdbcPollingConsumer {
         if (dataSourceConfig.getMappings() == null) {
             return;
         }
+
+        // Circuit breaker: skip polling if circuit is open
+        if (isCircuitOpen()) {
+            log.debug("Circuit breaker open, skipping poll until {}", new Date(circuitOpenUntil));
+            return;
+        }
+
+        boolean anyFailure = false;
         for (Mapping mapping : dataSourceConfig.getMappings()) {
             try {
                 pollTable(mapping);
             } catch (Exception e) {
-                log.error("Error polling table {}: ", mapping.getSourceTable(), e);
+                anyFailure = true;
+                log.error("Error polling table {}: {}", mapping.getSourceTable(), e.getMessage(), e);
             }
         }
+
+        if (anyFailure) {
+            int failures = consecutiveFailures.incrementAndGet();
+            if (failures >= FAILURE_THRESHOLD) {
+                long backoffMs = Math.min(INITIAL_BACKOFF_MS * (1L << (failures - FAILURE_THRESHOLD)), MAX_BACKOFF_MS);
+                circuitOpenUntil = System.currentTimeMillis() + backoffMs;
+                log.warn("Circuit breaker opened after {} consecutive failures, suspending polling for {}ms",
+                        failures, backoffMs);
+            }
+        } else {
+            if (consecutiveFailures.get() > 0) {
+                log.info("Polling recovered after {} consecutive failures", consecutiveFailures.get());
+            }
+            consecutiveFailures.set(0);
+            circuitOpenUntil = 0L;
+        }
+    }
+
+    private boolean isCircuitOpen() {
+        if (circuitOpenUntil == 0L) {
+            return false;
+        }
+        if (System.currentTimeMillis() >= circuitOpenUntil) {
+            log.info("Circuit breaker half-open, attempting next poll");
+            circuitOpenUntil = 0L;
+            return false;
+        }
+        return true;
     }
 
     private void pollTable(Mapping mapping) throws Exception {

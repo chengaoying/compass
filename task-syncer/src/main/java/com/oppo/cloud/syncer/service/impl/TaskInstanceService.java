@@ -80,6 +80,7 @@ public class TaskInstanceService extends CommonService implements ActionService 
      * Data save operation
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void dataSave(Map<String, String> data, Mapping mapping, String action) {
         TaskInstance instance = (TaskInstance) DataUtil.parseInstance(data, TaskInstanceBuilder.class);
         log.info("dataSave instance: " + instance.toString());

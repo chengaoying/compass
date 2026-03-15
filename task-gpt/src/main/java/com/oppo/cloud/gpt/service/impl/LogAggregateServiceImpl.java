@@ -84,12 +84,15 @@ public class LogAggregateServiceImpl implements LogAggregateService {
                 if (chatGPTConfig.isEnable()) {
                     advice = getGptAdvice(logCluster.getTemplate());
                     if (StringUtils.isBlank(advice)) {
-                        return; // TODO: send it back to queue
+                        log.warn("GPT returned empty advice for template cid={}, saving template without advice for later retry", cid);
                     }
                 }
+                // Always save the template — missing advice can be retried later
                 templateService.save(genTemplate(cid, logCluster.getTemplate(), advice, logMessage.getRawLog()));
                 templateService.addTemplate(logCluster, advice);
-                logStoreService.updateAdvice(logMessage.getIndex(), logMessage.getId(), advice);
+                if (StringUtils.isNotBlank(advice)) {
+                    logStoreService.updateAdvice(logMessage.getIndex(), logMessage.getId(), advice);
+                }
                 break;
             case CLUSTER_CHANGED: // merge cluster
                 Template template = templateService.find(logCluster.getId());

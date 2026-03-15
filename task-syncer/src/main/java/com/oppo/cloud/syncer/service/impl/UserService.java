@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -72,6 +73,7 @@ public class UserService extends CommonService implements ActionService {
      * Data saving
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void dataSave(Map<String, String> data, Mapping mapping, String action) {
         UserInfo instance = (UserInfo) DataUtil.parseInstance(data, UserBuilder.class);
         if (action.equals("INSERT")) {

@@ -41,8 +41,7 @@ public class HttpUtil {
             Response response = call.execute();
             return Objects.requireNonNull(response.body()).string();
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error(e.getMessage(), e);
+            log.error("HTTP GET request failed for url={}: {}", url, e.getMessage(), e);
             return null;
         }
     }

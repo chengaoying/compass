@@ -221,8 +221,7 @@ public class PeakDurationResourceRule extends BaseRule {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                log.error("Error in tuning when CPU peak utilization rate is high: " + e.getMessage());
+                log.error("Error in tuning when CPU peak utilization rate is high: {}", e.getMessage(), e);
             }
         }
 

@@ -24,7 +24,6 @@ import com.oppo.cloud.syncer.domain.RawTable;
 import com.oppo.cloud.syncer.service.ActionService;
 import com.oppo.cloud.syncer.service.impl.DummyService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.MultiValueMap;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -33,12 +32,16 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * 消费者
+ * Kafka consumer for Canal CDC messages.
  */
 @Slf4j
 @Component
@@ -47,13 +50,16 @@ public class MessageConsumer {
     @Resource
     private DataSourceConfig dataSourceConfig;
 
-    /**
-     * Table service
-     */
     @Autowired
     private Map<String, ActionService> serviceMap;
 
-    private MultiValueMap tableMapping;
+    /** Thread-safe table mapping, initialized once at startup */
+    private volatile Map<String, List<Mapping>> tableMapping;
+
+    @PostConstruct
+    public void init() {
+        initTableMapping();
+    }
 
     /**
      * Receive and handle sql data
@@ -69,16 +75,29 @@ public class MessageConsumer {
         // Parsing table data
         RawTable rawTable = JSON.parseObject(message, RawTable.class);
 
-        List<Mapping> mappings = this.getTableMapping(rawTable.getTable());
+        List<Mapping> mappings = getTableMapping(rawTable.getTable());
         if (mappings == null || mappings.isEmpty()) {
             consumer.commitAsync();
             return;
         }
+
+        boolean allSucceeded = true;
         for (Mapping mapping : mappings) {
-            this.consumeMessage(rawTable, mapping);
+            try {
+                this.consumeMessage(rawTable, mapping);
+            } catch (Exception e) {
+                allSucceeded = false;
+                log.error("Failed to process message for table={}, targetTable={}: {}",
+                        rawTable.getTable(), mapping.getTargetTable(), e.getMessage(), e);
+            }
         }
 
-        consumer.commitAsync();
+        if (allSucceeded) {
+            consumer.commitAsync();
+        } else {
+            log.warn("Skipping commit for table={} due to processing errors, message will be redelivered",
+                    rawTable.getTable());
+        }
     }
 
     /**
@@ -125,31 +144,27 @@ public class MessageConsumer {
     }
 
     /**
-     * Get table mapping rules
+     * Get table mapping rules (lock-free)
      */
-    public synchronized List<Mapping> getTableMapping(String table) {
-        if (this.tableMapping == null) {
+    public List<Mapping> getTableMapping(String table) {
+        Map<String, List<Mapping>> mapping = this.tableMapping;
+        if (mapping == null) {
             initTableMapping();
+            mapping = this.tableMapping;
         }
-        return (List<Mapping>) this.tableMapping.get(table);
+        return mapping.getOrDefault(table, Collections.emptyList());
     }
 
     /**
-     * Initialization table mapping rules
+     * Initialize table mapping rules using ConcurrentHashMap (thread-safe, no locking)
      */
     public void initTableMapping() {
-        // this.tableMapping = new HashMap<>();
-        this.tableMapping = new MultiValueMap();
+        Map<String, List<Mapping>> newMapping = new ConcurrentHashMap<>();
         for (Mapping mapping : this.dataSourceConfig.getMappings()) {
-            this.tableMapping.put(mapping.getTable(), mapping);
+            newMapping.computeIfAbsent(mapping.getTable(), k -> new CopyOnWriteArrayList<>()).add(mapping);
         }
-    }
-
-    /**
-     * TODO: Verify Mapping
-     */
-    public void validateMapping() {
-
+        this.tableMapping = newMapping;
+        log.info("Table mapping initialized with {} source tables", newMapping.size());
     }
 
     /**

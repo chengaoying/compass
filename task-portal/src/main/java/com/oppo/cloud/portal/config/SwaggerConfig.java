@@ -26,6 +26,7 @@ import org.springframework.boot.actuate.endpoint.web.annotation.ServletEndpoints
 import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -38,9 +39,10 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * swagger Configuration
+ * Swagger Configuration — only enabled in dev/test profiles to avoid exposing API docs in production.
  */
 @Configuration
+@Profile({"dev", "test", "default"})
 public class SwaggerConfig {
 
     @Bean

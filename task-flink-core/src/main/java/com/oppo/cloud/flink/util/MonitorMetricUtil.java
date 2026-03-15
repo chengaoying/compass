@@ -424,7 +424,7 @@ public class MonitorMetricUtil {
                             result.add(metricTs);
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.warn("Failed to parse metric value: {}", e.getMessage());
                     }
                 }
             }
@@ -453,7 +453,7 @@ public class MonitorMetricUtil {
                             tsSec = metricTs;
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        log.warn("Failed to parse metric value: {}", e.getMessage());
                     }
                 }
             }

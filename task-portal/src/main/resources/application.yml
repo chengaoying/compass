@@ -4,7 +4,8 @@ server:
     context-path: /compass
     session:
       cookie:
-        http-only: false
+        http-only: true
+        secure: true
       timeout: 86400
 
 spring:
