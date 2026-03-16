@@ -40,24 +40,5 @@
             <outputDirectory>task-syncer</outputDirectory>
         </fileSet>
 
-        <fileSet>
-            <directory>${project.parent.basedir}/task-canal/target/task-canal</directory>
-            <outputDirectory>task-canal</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-canal-adapter/target/task-canal-adapter</directory>
-            <outputDirectory>task-canal-adapter</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-flink/target/task-flink</directory>
-            <outputDirectory>task-flink</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-gpt/target/task-gpt</directory>
-            <outputDirectory>task-gpt</outputDirectory>
-        </fileSet>
     </fileSets>
 </assembly>

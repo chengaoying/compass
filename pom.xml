@@ -14,25 +14,14 @@
         <module>task-mbg</module>
         <module>task-common</module>
 
-        <!-- Active service modules -->
+        <!-- Service modules -->
         <module>task-analyzer</module>   <!-- merged: task-detect + task-parser -->
         <module>task-collector</module>  <!-- merged: task-application + task-metadata -->
         <module>task-syncer</module>
         <module>task-portal</module>
-        <module>task-gpt</module>
 
-        <!-- Optional: Flink real-time diagnosis -->
-        <module>task-flink-core</module>
-        <module>task-flink</module>
-
-        <!-- Optional: Canal CDC adapter (needed only when scheduler DB is not directly accessible) -->
-        <module>task-canal</module>
-        <module>task-canal-adapter</module>
-
-        <!-- Frontend and packaging -->
-        <module>task-ui</module>
+        <!-- Packaging -->
         <module>task-assembly</module>
-
     </modules>
 
     <parent>
@@ -64,9 +53,6 @@
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven-surefire-report.version>2.19.1</maven-surefire-report.version>
         <maven-assembly-plugin.version>3.1.0</maven-assembly-plugin.version>
-        <curator.version>4.2.0</curator.version>
-        <!-- ZooKeeper retained only for Canal HA. Kafka now uses KRaft mode (no ZooKeeper). -->
-        <zookeeper.version>3.7.1</zookeeper.version>
         <kafka-clients.version>3.4.0</kafka-clients.version>
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <micrometer-prometheus.version>1.12.4</micrometer-prometheus.version>
@@ -82,10 +68,8 @@
         <assembly.skip>true</assembly.skip>
         <derby.version>10.14.2.0</derby.version>
         <testcontainers.version>1.19.0</testcontainers.version>
-        <chatgpt-java.version>1.1.3</chatgpt-java.version>
         <lz4-java.version>1.8.0</lz4-java.version>
         <zstd-jni.version>1.5.5-2</zstd-jni.version>
-        <flink.ui/>
         <spark.ui/>
 
         <!--Vulnerability version fixes-->
@@ -128,19 +112,7 @@
 
             <dependency>
                 <groupId>com.oppo.cloud</groupId>
-                <artifactId>task-ui</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.oppo.cloud</groupId>
                 <artifactId>task-syncer</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.oppo.cloud</groupId>
-                <artifactId>task-flink-core</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -206,18 +178,6 @@
             </dependency>
 
             <!-- jjwt removed: unused in codebase, only com.auth0:java-jwt is used (see JWTUtil.java) -->
-
-            <dependency>
-                <groupId>org.apache.curator</groupId>
-                <artifactId>curator-recipes</artifactId>
-                <version>${curator.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.zookeeper</groupId>
-                <artifactId>zookeeper</artifactId>
-                <version>${zookeeper.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
@@ -374,12 +334,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.unfbx</groupId>
-                <artifactId>chatgpt-java</artifactId>
-                <version>${chatgpt-java.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.lz4</groupId>
                 <artifactId>lz4-java</artifactId>
                 <version>${lz4-java.version}</version>
@@ -479,12 +433,6 @@
             <id>spark</id>
             <properties>
                 <spark.ui>spark</spark.ui>
-            </properties>
-        </profile>
-        <profile>
-            <id>flink</id>
-            <properties>
-                <flink.ui>flink</flink.ui>
             </properties>
         </profile>
     </profiles>

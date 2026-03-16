@@ -84,15 +84,6 @@ custom:
       name: "compass-job-instance"
       shards: 10
       replicas: 2
-    flinkReportIndex:
-      name: "compass-flink-report"
-      shards: 10
-      replicas: 2
-    flinkTaskAnalysisIndex:
-      name: "compass-flink-task-analysis"
-      shards: 10
-      replicas: 2
-
   redis:
     logRecordKey: "{lua}:log:record"
 
@@ -108,7 +99,3 @@ spark:
       codec: ""
 
 
-diagnosis:
-  flinkPrometheusHost: http://localhost:9090
-  flinkPrometheusToken:
-  flinkPrometheusDatabase:

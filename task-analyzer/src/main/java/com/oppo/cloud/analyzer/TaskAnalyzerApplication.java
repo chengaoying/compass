@@ -34,7 +34,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  *       → DetectService.detect() [6 workflow detectors]
  *       → AnalyzerBridge.analyze(logRecord)  ← NEW: replaces Redis push
  *       → JobManager.run(logRecord)           ← was in separate process
- *       → Kafka[task-gpt]
  * </pre>
  */
 @SpringBootApplication(scanBasePackages = {

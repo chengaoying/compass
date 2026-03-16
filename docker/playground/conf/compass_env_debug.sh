@@ -37,12 +37,6 @@ export SPRING_OPENSEARCH_TRUSTSTOREPASSWORD=""
 # Spark compression codec (empty = no compression)
 export SPARK_IO_COMPRESSION_CODEC=""
 
-# ChatGPT disabled
-export CHATGPT_ENABLE=false
-
-# Canal disabled (no scheduler DB sync in debug mode)
-export TASK_CANAL_ENABLE="False"
-
 # =============================================================================
 # Environment variables for new merged services
 # =============================================================================

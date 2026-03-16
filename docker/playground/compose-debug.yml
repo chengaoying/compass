@@ -17,10 +17,7 @@
 #   - task-analyzer  (diagnosis: merged task-detect + task-parser)
 #
 # Skipped services (not needed for basic debugging):
-#   - task-canal / task-canal-adapter (CDC from scheduler DB)
 #   - task-syncer (scheduler data sync)
-#   - task-flink  (Flink diagnostics)
-#   - task-gpt    (ChatGPT integration)
 
 services:
   postgres:
@@ -91,7 +88,6 @@ services:
       - "5006:5006"   # debug: collector
       - "5007:5007"   # debug: analyzer
     environment:
-      - TASK_CANAL_ENABLE=False
       - COMPASS_DEBUG=true
       - JAVA_DEBUG_PORT_PORTAL=5005
       - JAVA_DEBUG_PORT_COLLECTOR=5006

@@ -48,8 +48,8 @@ spring:
     consumer:
       enable-auto-commit: false
       max-poll-records: 50   # increased from 1 for throughput
-    # topic for publishing parsed log results to task-gpt
-    topic: "task-gpt"
+    # topic for publishing parsed log results
+    topic: "task-analysis-result"
 
 mybatis:
   mapper-locations:
