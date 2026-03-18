@@ -131,24 +131,4 @@ public class JobController {
         return CommonStatus.success("ok");
     }
 
-    @Deprecated
-    @PostMapping(value = "/log")
-    @Operation(summary = "exception analysis")
-    public CommonStatus<?> getExceptionLogs(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
-        return CommonStatus.success(jobService.searchLogInfo(jobDetailRequest));
-    }
-
-    @Deprecated
-    @PostMapping(value = "/durationTrend")
-    @Operation(summary = "time-consuming trend of runtime")
-    public CommonStatus<?> getHistoryData(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
-        return CommonStatus.success(jobService.searchDurationTrend(jobDetailRequest));
-    }
-
-    @Deprecated
-    @PostMapping(value = "/baseline")
-    @Operation(summary = "baseline detail of a job")
-    public CommonStatus<?> getBaseline(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
-        return CommonStatus.success(jobService.searchJobDatum(jobDetailRequest));
-    }
 }

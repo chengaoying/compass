@@ -175,7 +175,7 @@ public class UserInfo implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
         sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
+        sb.append(", password=").append("[REDACTED]");
         sb.append(", isAdmin=").append(isAdmin);
         sb.append(", icon=").append(icon);
         sb.append(", email=").append(email);

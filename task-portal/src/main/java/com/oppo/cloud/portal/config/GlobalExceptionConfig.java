@@ -35,11 +35,11 @@ import javax.validation.ConstraintViolationException;
 public class GlobalExceptionConfig {
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public CommonStatus exceptionHandler(Exception e) {
         log.error("GlobalException: ", e);
-        return CommonStatus.failed(e.getMessage());
+        return CommonStatus.failed("An internal error occurred. Please contact the administrator.");
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
