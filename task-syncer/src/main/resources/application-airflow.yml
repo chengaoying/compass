@@ -5,13 +5,13 @@ spring:
       strict: false
       datasource:
         diagnose:
-          url: jdbc:mysql://localhost:33066/compass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
-          username: root
-          password: root
+          url: ${DB_URL:jdbc:mysql://localhost:33066/compass?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&tinyInt1isBit=false}
+          username: ${DB_USERNAME:}
+          password: ${DB_PASSWORD:}
         source:
-          url: jdbc:mysql://localhost:33066/airflow?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&tinyInt1isBit=false
-          username: root
-          password: Root@666
+          url: ${AIRFLOW_DB_URL:jdbc:mysql://localhost:33066/airflow?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&tinyInt1isBit=false}
+          username: ${AIRFLOW_DB_USERNAME:}
+          password: ${AIRFLOW_DB_PASSWORD:}
 
   kafka:
     bootstrap-servers: localhost:9095
