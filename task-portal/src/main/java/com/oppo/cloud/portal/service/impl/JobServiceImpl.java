@@ -98,7 +98,18 @@ public class JobServiceImpl implements JobService {
         builder.from(request.getFrom()).size(request.getSize());
 
         List<JobAnalysis> items = openSearchService.find(JobAnalysis.class, builder, jobsIndex + "-*");
-        List<JobInfo> jobInfos = items.stream().map(data -> JobInfo.from(data, redisService.get(String.format("%s:%s:%s", data.getProjectName(), data.getFlowName(), data.getTaskName())))).collect(Collectors.toList());
+
+        // Batch fetch Redis values using MGET instead of N individual GET calls
+        List<String> redisKeys = items.stream()
+                .map(data -> String.format("%s:%s:%s", data.getProjectName(), data.getFlowName(), data.getTaskName()))
+                .collect(Collectors.toList());
+        List<Object> redisValues = redisKeys.isEmpty() ? Collections.emptyList() : redisService.multiGet(redisKeys);
+
+        List<JobInfo> jobInfos = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            Object redisValue = (redisValues != null && i < redisValues.size()) ? redisValues.get(i) : null;
+            jobInfos.add(JobInfo.from(items.get(i), redisValue));
+        }
 
         JobsResponse response = new JobsResponse();
         response.setJobInfos(jobInfos);

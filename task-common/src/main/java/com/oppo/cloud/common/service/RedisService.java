@@ -44,6 +44,11 @@ public interface RedisService {
     Object get(String key);
 
     /**
+     * Get the values of all given keys (MGET)
+     */
+    List<Object> multiGet(List<String> keys);
+
+    /**
      * Delete given key
      */
     Boolean del(String key);
