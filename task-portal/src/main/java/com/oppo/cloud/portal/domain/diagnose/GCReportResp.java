@@ -21,7 +21,7 @@ import com.oppo.cloud.common.domain.gc.HeapUsed;
 import com.oppo.cloud.common.domain.gc.TenuredUsed;
 import com.oppo.cloud.common.domain.gc.YoungUsed;
 import com.oppo.cloud.portal.util.UnitUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
@@ -30,31 +30,31 @@ import java.util.List;
 @Data
 public class GCReportResp {
 
-    @ApiModelProperty(value = "Maximum allocated memory")
+    @Schema(description = "Maximum allocated memory")
     private String maxHeapAllocatedSize;
 
-    @ApiModelProperty(value = "Maximum memory usage")
+    @Schema(description = "Maximum memory usage")
     private String maxHeapUsedSize;
 
-    @ApiModelProperty(value = "Total time")
+    @Schema(description = "Total time")
     private String totalTime;
 
-    @ApiModelProperty(value = "YG count/time (s)")
+    @Schema(description = "YG count/time (s)")
     private String YGCountAndDuration;
 
-    @ApiModelProperty(value = "FG count/time (s)")
+    @Schema(description = "FG count/time (s)")
     private String FGCountAndDuration;
 
-    @ApiModelProperty(value = "GC count/time (s)")
+    @Schema(description = "GC count/time (s)")
     private String GCCountAndDuration;
 
-    @ApiModelProperty(value = "Heap usage trend chart")
+    @Schema(description = "Heap usage trend chart")
     private List<HeapUsed> heapUsed;
 
-    @ApiModelProperty(value = "Tenured usage trend chart")
+    @Schema(description = "Tenured usage trend chart")
     private List<TenuredUsed> tenuredUsed;
 
-    @ApiModelProperty(value = "Young usage trend chart")
+    @Schema(description = "Young usage trend chart")
     private List<YoungUsed> youngUsed;
 
     public void build(GCReport gcReport) {

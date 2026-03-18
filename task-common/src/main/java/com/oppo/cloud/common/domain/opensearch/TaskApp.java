@@ -21,11 +21,10 @@ import com.oppo.cloud.common.constant.ApplicationType;
 import com.oppo.cloud.common.constant.Constant;
 import com.oppo.cloud.common.domain.cluster.spark.SparkApp;
 import com.oppo.cloud.common.domain.cluster.yarn.YarnApp;
-import com.oppo.cloud.common.domain.mr.MRJobHistoryLogPath;
 import com.oppo.cloud.common.service.RedisService;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.common.util.LogPathUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,106 +35,97 @@ import java.util.*;
 @Data
 public class TaskApp extends OpenSearchInfo {
 
-    @ApiModelProperty(value = "applicationId")
+    @Schema(description = "applicationId")
     private String applicationId;
 
-    @ApiModelProperty(value = "applicationType")
+    @Schema(description = "applicationType")
     private String applicationType;
 
-    @ApiModelProperty(value = "Execute user")
+    @Schema(description = "Execute user")
     private String executeUser;
 
-    @ApiModelProperty(value = "queue")
+    @Schema(description = "queue")
     private String queue;
 
-    @ApiModelProperty(value = "cluster name")
+    @Schema(description = "cluster name")
     private String clusterName;
 
-    @ApiModelProperty(value = "Users")
+    @Schema(description = "Users")
     private List<SimpleUser> users;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Project ID")
+    @Schema(description = "Project ID")
     private Integer projectId;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Flow Id")
+    @Schema(description = "Flow Id")
     private Integer flowId;
 
-    @ApiModelProperty(value = "Task name")
+    @Schema(description = "Task name")
     private String taskName;
 
-    @ApiModelProperty(value = "Task Id")
+    @Schema(description = "Task Id")
     private Integer taskId;
 
-    @ApiModelProperty(value = "Execution date")
+    @Schema(description = "Execution date")
     private Date executionDate;
 
-    @ApiModelProperty(value = "Start time of the task")
+    @Schema(description = "Start time of the task")
     private Date startTime;
 
-    @ApiModelProperty(value = "End time of the task")
+    @Schema(description = "End time of the task")
     private Date finishTime;
 
-    @ApiModelProperty(value = "Running time")
+    @Schema(description = "Running time")
     private Double elapsedTime;
 
-    @ApiModelProperty(value = "Task execution status")
+    @Schema(description = "Task execution status")
     private String taskAppState;
 
-    @ApiModelProperty(value = "Memory consumption(Unit: memory·seconds[mb·s])")
+    @Schema(description = "Memory consumption(Unit: memory·seconds[mb·s])")
     private Double memorySeconds;
 
-    @ApiModelProperty(value = "CPU consumption (Unit: vcore·seconds)")
+    @Schema(description = "CPU consumption (Unit: vcore·seconds)")
     private Double vcoreSeconds;
 
-    @ApiModelProperty(value = "AM diagnosis information")
+    @Schema(description = "AM diagnosis information")
     private String diagnostics;
 
-    @ApiModelProperty(value = "The app retried for the nth time")
+    @Schema(description = "The app retried for the nth time")
     private Integer retryTimes;
 
-    @ApiModelProperty(value = "Categories of exception")
+    @Schema(description = "Categories of exception")
     private List<String> categories;
 
-    @ApiModelProperty(value = "Task processing status")
+    @Schema(description = "Task processing status")
     private Integer taskStatus = 0;
 
-    @ApiModelProperty(value = "Result of diagnosis")
+    @Schema(description = "Result of diagnosis")
     private String diagnoseResult;
 
-    @ApiModelProperty(value = "SparkUI link")
+    @Schema(description = "SparkUI link")
     private String sparkUI;
 
-    @ApiModelProperty(value = "Spark event log path")
+    @Schema(description = "Spark event log path")
     private String eventLogPath;
 
-    @ApiModelProperty(value = "Yarn container log path")
+    @Schema(description = "Yarn container log path")
     private String yarnLogPath;
 
-    @ApiModelProperty(value = "MR job history done path")
-    private String jobHistoryDoneLogPath;
-
-    @ApiModelProperty(value = "MR job history intermediate done path")
-    private String jobHistoryIntermediateDoneLogPath;
-
-    @ApiModelProperty(value = "MR job history staging path")
-    private String jobHistoryStagingLogPath;
-
-    @ApiModelProperty(value = "AM host")
+    @Schema(description = "AM host")
     private String amHost;
 
-    @ApiModelProperty(value = "Delete or not")
+    @Schema(description = "Delete or not")
     private Integer deleted = 0;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
     public Map<String, Object> genDoc() throws Exception {
@@ -200,12 +190,6 @@ public class TaskApp extends OpenSearchInfo {
         if (sparkApp != null) {
             this.eventLogPath = LogPathUtil.getSparkEventLogPath(sparkApp.getEventLogDirectory(), this.applicationId,
                     sparkApp.getAttemptId(), yarnApp.getState(), sparkCompressionCodec);
-        }
-        if (ApplicationType.MAPREDUCE.getValue().equals(yarnApp.getApplicationType())) {
-            MRJobHistoryLogPath mrJobHistoryLogPath = LogPathUtil.getMRJobHistoryDoneLogPath(yarnApp, redisService);
-            this.jobHistoryDoneLogPath = mrJobHistoryLogPath.getDoneLogPath();
-            this.jobHistoryIntermediateDoneLogPath = mrJobHistoryLogPath.getIntermediateDoneLogPath();
-            this.jobHistoryStagingLogPath = mrJobHistoryLogPath.getStagingLogPath();
         }
 
         String yarnLogPath = LogPathUtil.getYarnLogPath(Constant.JHS_HDFS_PATH, yarnApp.getIp(), redisService);

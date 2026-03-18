@@ -16,16 +16,15 @@
 
 package com.oppo.cloud.portal.domain.blocklist;
 
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-@ApiOperation("Delete blocklist request")
+@Schema(name = "BlocklistDelReq", description = "Delete blocklist request")
 public class BlocklistDelReq {
 
-    @ApiModelProperty(value = "block list ids")
+    @Schema(description = "block list ids")
     List<Integer> blocklistIds;
 }

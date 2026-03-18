@@ -93,8 +93,7 @@ public class OneClickDiagnosisServiceImpl implements OneClickDiagnosisService {
     public DiagnoseResult diagnose(String applicationId) throws Exception {
 
         TaskApp taskApp = this.buildTaskApp(applicationId);
-        if (!taskApp.getApplicationType().equals(ApplicationType.SPARK.getValue()) &&
-                !taskApp.getApplicationType().equals(ApplicationType.MAPREDUCE.getValue())) {
+        if (!taskApp.getApplicationType().equals(ApplicationType.SPARK.getValue())) {
             throw new Exception(String.format(MessageSourceUtil.get("UNSUPPORTED_TYPE"), taskApp.getApplicationType()));
         }
 
@@ -192,10 +191,6 @@ public class OneClickDiagnosisServiceImpl implements OneClickDiagnosisService {
             stateList.add(checkTaskParserProgress(LogType.SPARK_EVENT, taskApp.getApplicationId(), processInfoList));
             stateList.add(checkTaskParserProgress(LogType.SPARK_EXECUTOR, taskApp.getApplicationId(), processInfoList));
         }
-        if (ApplicationType.MAPREDUCE.getValue().equals(taskApp.getApplicationType())) {
-            stateList.add(checkTaskParserProgress(LogType.MAPREDUCE_JOB_HISTORY, taskApp.getApplicationId(), processInfoList));
-            stateList.add(checkTaskParserProgress(LogType.MAPREDUCE_CONTAINER, taskApp.getApplicationId(), processInfoList));
-        }
         return stateList;
     }
 
@@ -205,10 +200,6 @@ public class OneClickDiagnosisServiceImpl implements OneClickDiagnosisService {
         if (ApplicationType.SPARK.getValue().equals(taskApp.getApplicationType())) {
             list.add(LogType.SPARK_EVENT);
             list.add(LogType.SPARK_EXECUTOR);
-        }
-        if (ApplicationType.MAPREDUCE.getValue().equals(taskApp.getApplicationType())) {
-            list.add(LogType.MAPREDUCE_JOB_HISTORY);
-            list.add(LogType.MAPREDUCE_CONTAINER);
         }
         return list;
     }

@@ -33,8 +33,10 @@ public class TestAzKaBanProjectFlowDecode {
                         "FROM project_flows WHERE project_id=1 AND version=2";
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection connection =
-                    DriverManager.getConnection("jdbc:mysql://localhost:3306/azkaban", "root", "Root@666");
+            String dbUrl = System.getenv().getOrDefault("TEST_DB_URL", "jdbc:mysql://localhost:3306/azkaban");
+            String dbUser = System.getenv().getOrDefault("TEST_DB_USER", "root");
+            String dbPassword = System.getenv().getOrDefault("TEST_DB_PASSWORD", "");
+            Connection connection = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
             PreparedStatement stmt = connection.prepareStatement(SELECT_ALL_PROJECT_FLOWS);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

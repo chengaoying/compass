@@ -20,7 +20,6 @@ package com.oppo.cloud.common.constant;
 public enum ApplicationType {
 
     SPARK("SPARK"),
-    MAPREDUCE("MAPREDUCE"),
     FLINK("Apache Flink");
 
     private final String value;

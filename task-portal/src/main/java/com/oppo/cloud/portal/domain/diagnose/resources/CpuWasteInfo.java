@@ -22,24 +22,24 @@ import com.oppo.cloud.portal.domain.diagnose.Chart;
 import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.runtime.base.MetricInfo;
 import com.oppo.cloud.portal.util.UnitUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
-@ApiModel("CpuWaste Information")
+@Schema(name = "CpuWaste Information")
 public class CpuWasteInfo extends IsAbnormal {
 
-    @ApiModelProperty(value = "waste percent of driver")
+    @Schema(description = "waste percent of driver")
     private double driverWastePercent;
 
-    @ApiModelProperty(value = "waste percent of executor")
+    @Schema(description = "waste percent of executor")
     private double executorWastePercent;
 
-    @ApiModelProperty(value = "chart information")
+    @Schema(description = "chart information")
     private Map<String, Chart.ChartInfo> dataCategory = new HashMap<>();
 
     private double driverThreshold;

@@ -26,8 +26,8 @@ import com.oppo.cloud.portal.domain.blocklist.BlocklistDelReq;
 import com.oppo.cloud.portal.domain.blocklist.BlocklistReq;
 import com.oppo.cloud.portal.service.BlocklistService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +42,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/api/v1/blocklist")
-@Api(value = "AbnormalTaskController", description = "blocklist api")
+@Tag(name = "AbnormalTaskController", description = "blocklist api")
 @Slf4j
 public class BlocklistController {
 
@@ -50,7 +50,7 @@ public class BlocklistController {
     BlocklistService blocklistService;
 
     @PostMapping(value = "/list")
-    @ApiOperation(value = "list items", httpMethod = "POST")
+    @Operation(summary = "list items")
     @ResponseBody
     public CommonStatus<?> list(@RequestBody BlocklistReq blocklistReq) throws Exception {
         PageHelper.startPage(blocklistReq.getPage(), blocklistReq.getPageSize());
@@ -59,7 +59,7 @@ public class BlocklistController {
     }
 
     @PostMapping(value = "/del")
-    @ApiOperation(value = "delete item", httpMethod = "POST")
+    @Operation(summary = "delete item")
     @ResponseBody
     public CommonStatus<?> delete(@RequestBody BlocklistDelReq blocklistDelReq) throws Exception {
         blocklistService.deleteByIds(blocklistDelReq.getBlocklistIds());
@@ -67,7 +67,7 @@ public class BlocklistController {
     }
 
     @PostMapping(value = "/searchTasks")
-    @ApiOperation(value = "search items", httpMethod = "POST")
+    @Operation(summary = "search items")
     @ResponseBody
     @Transactional
     public CommonStatus<?> searchTasks(@RequestBody BlocklistAddReq blocklistAddReq) throws Exception {
@@ -75,7 +75,7 @@ public class BlocklistController {
     }
 
     @PostMapping(value = "/add")
-    @ApiOperation(value = "add items", httpMethod = "POST")
+    @Operation(summary = "add items")
     @ResponseBody
     @Transactional
     public CommonStatus<?> add(@RequestBody @Valid BlocklistAddReq blocklistAddReq) throws Exception {

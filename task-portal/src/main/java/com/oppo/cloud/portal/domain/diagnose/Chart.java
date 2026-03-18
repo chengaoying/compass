@@ -16,8 +16,8 @@
 
 package com.oppo.cloud.portal.domain.diagnose;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -25,25 +25,25 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@ApiModel("Chart Type")
+@Schema(name = "Chart Type")
 public class Chart<T> {
 
-    @ApiModelProperty(value = "X-axis")
+    @Schema(description = "X-axis")
     private String x;
 
-    @ApiModelProperty(value = "Y-axis")
+    @Schema(description = "Y-axis")
     private String y;
 
-    @ApiModelProperty(value = "Y-axis unit")
+    @Schema(description = "Y-axis unit")
     private String unit;
 
-    @ApiModelProperty(value = "Chart data")
+    @Schema(description = "Chart data")
     private List<T> dataList = new ArrayList<>();
 
-    @ApiModelProperty(value = "Data category description (different data displayed in different colors)")
+    @Schema(description = "Data category description (different data displayed in different colors)")
     private Map<String, ChartInfo> dataCategory;
 
-    @ApiModelProperty(value = "Chart description")
+    @Schema(description = "Chart description")
     private String des;
 
     @Data

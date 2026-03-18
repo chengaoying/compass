@@ -78,6 +78,19 @@ public class RedisServiceImpl implements RedisService {
     }
 
     /**
+     * Get the values of all given keys (MGET)
+     */
+    @Override
+    public List<Object> multiGet(List<String> keys) {
+        try {
+            return redisTemplate.opsForValue().multiGet(keys);
+        } catch (Exception e) {
+            log.error("failed to multiGet keys, count: {}, err: {}", keys.size(), e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Delete given key
      */
     @Override

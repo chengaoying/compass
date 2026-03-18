@@ -16,31 +16,31 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Project implements Serializable {
 
-    @ApiModelProperty(value = "Project id")
+    @Schema(description = "Project id")
     private Integer id;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Description")
+    @Schema(description = "Description")
     private String description;
 
-    @ApiModelProperty(value = "Creator id")
+    @Schema(description = "Creator id")
     private Integer userId;
 
-    @ApiModelProperty(value = "Project enable status: 0->disabled; 1->enabled")
+    @Schema(description = "Project enable status: 0->disabled; 1->enabled")
     private Integer projectStatus;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;

@@ -65,24 +65,6 @@ public enum AppCategoryEnum {
     // global sorting exception
     GLOBAL_SORT("globalSortAbnormal", "全局排序异常", "runPerformance", "globalSortAbnormal"),
 
-    // MapReduce memory waste
-    MR_MEMORY_WASTE("mrMemoryWaste", "MR内存浪费", "resourceUsage", "mrMemoryWaste"),
-
-    // MapReduce large table scan
-    MR_LARGE_TABLE_SCAN("mrLargeTableScan", "MR大表扫描", "runPerformance", "mrLargeTableScan"),
-
-    // MapReduce data skew
-    MR_DATA_SKEW("mrDataSkew", "MR数据倾斜", "runPerformance", "mrDataSkew"),
-
-    // MapReduce Task long tail
-    MR_TASK_DURATION("mrTaskDurationAbnormal", "MRTask长尾", "runPerformance", "mrTaskDurationAbnormal"),
-
-    // MapReduce speculative task is too many
-    MR_SPECULATIVE_TASK("mrSpeculativeTask", "MR推测执行Task过多", "runPerformance", "mrSpeculativeTask"),
-
-    // MapReduce GC exception
-    MR_GC_ABNORMAL("mrGCAbnormal", "MRGC异常", "runPerformance", "mrGCAbnormal"),
-
     // other exception
     OTHER_EXCEPTION("otherException", "其他异常", "runError", "otherException");
 

@@ -1,0 +1,14 @@
+# DolphinScheduler integration profile (inherited from task-application)
+custom:
+  rules:
+    - logPathDep:
+        # IMPORTANT: ${id} is replaced via PreparedStatement parameter binding (not string interpolation)
+        # to prevent SQL injection. See LogParserServiceImpl for implementation.
+        query: "SELECT CASE WHEN end_time IS NOT NULL THEN end_time ELSE start_time END as end_time,log_path FROM t_ds_task_instance WHERE id=?"
+      logPathJoins:
+        - { "column": "", "data": "/flume/dolphinscheduler" }
+        - { "column": "end_time", "regex": "^.*(?<date>\\d{4}-\\d{2}-\\d{2}).+$", "name": "date" }
+        - { "column": "log_path", "regex": "^.*logs/(?<logpath>.*)$", "name": "logpath" }
+      extractLog:
+        regex: ".*(?<applicationId>application_[0-9]+_[0-9]+).*$"
+        name: "applicationId"

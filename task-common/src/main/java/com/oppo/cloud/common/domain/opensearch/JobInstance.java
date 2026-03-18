@@ -17,8 +17,8 @@
 package com.oppo.cloud.common.domain.opensearch;
 
 import com.oppo.cloud.common.util.DateUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,58 +28,58 @@ import java.util.*;
 
 
 @Data
-@ApiModel("all job instance info will save in this index of es")
+@Schema(name = "all job instance info will save in this index of es")
 public class JobInstance extends OpenSearchInfo {
 
-    @ApiModelProperty(value = "users")
+    @Schema(description = "users")
     private List<SimpleUser> users;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "project Id")
+    @Schema(description = "project Id")
     private Integer projectId;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "flow Id")
+    @Schema(description = "flow Id")
     private Integer flowId;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "task Id")
+    @Schema(description = "task Id")
     private Integer taskId;
 
-    @ApiModelProperty(value = "execution date")
+    @Schema(description = "execution date")
     private Date executionDate;
 
-    @ApiModelProperty(value = "start time")
+    @Schema(description = "start time")
     private Date startTime;
 
-    @ApiModelProperty(value = "end time")
+    @Schema(description = "end time")
     private Date endTime;
 
-    @ApiModelProperty(value = "duration")
+    @Schema(description = "duration")
     private Double duration;
 
-    @ApiModelProperty(value = "task state")
+    @Schema(description = "task state")
     private String taskState;
 
-    @ApiModelProperty(value = "memory·seconds")
+    @Schema(description = "memory·seconds")
     private Double memorySeconds;
 
-    @ApiModelProperty(value = "vcore·seconds")
+    @Schema(description = "vcore·seconds")
     private Double vcoreSeconds;
 
-    @ApiModelProperty(value = "task type")
+    @Schema(description = "task type")
     private String taskType;
 
-    @ApiModelProperty(value = "retry times")
+    @Schema(description = "retry times")
     private Integer retryTimes;
 
-    @ApiModelProperty(value = "create time")
+    @Schema(description = "create time")
     private Date createTime;
 
     public Map<String, Object> genDoc() throws Exception {

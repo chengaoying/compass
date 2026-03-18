@@ -1,0 +1,102 @@
+# Minimal debug deployment for Compass
+# Usage:
+#   1. Build: mvn clean package -DskipTests -Pdist
+#   2. Copy:  cp dist/compass-*.tar.gz docker/playground/
+#   3. Start deps:   docker compose -f compose-debug.yml --profile dependencies up -d
+#   4. Start compass: docker compose -f compose-debug.yml --profile compass-debug up -d --build
+#   5. Web UI: http://127.0.0.1:7075/compass  (compass/compass)
+#
+# Debug ports (JPDA remote debug):
+#   - task-portal:   5005
+#   - task-collector: 5006
+#   - task-analyzer: 5007
+#
+# Minimal services started:
+#   - task-portal    (Web UI + REST API)
+#   - task-collector (data collection: merged task-application + task-metadata)
+#   - task-analyzer  (diagnosis: merged task-detect + task-parser)
+#
+# Skipped services (not needed for basic debugging):
+#   - task-syncer (scheduler data sync)
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-12}
+    profiles: ["dependencies"]
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: compass
+    container_name: compass-debug-postgres
+    hostname: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./script/compass_postgresql.sql:/docker-entrypoint-initdb.d/compass_postgresql.sql
+
+  kafka:
+    image: bitnami/kafka:3.6.1
+    profiles: ["dependencies"]
+    environment:
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    container_name: compass-debug-kafka
+    hostname: kafka
+    ports:
+      - 9092:9092
+
+  redis:
+    image: redis:7.2.1
+    profiles: ["dependencies"]
+    container_name: compass-debug-redis
+    hostname: redis
+    ports:
+      - 6379:6379
+
+  opensearch:
+    image: opensearchproject/opensearch:2.13.0
+    profiles: ["dependencies"]
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "DISABLE_INSTALL_DEMO_CONFIG=true"
+      - "DISABLE_SECURITY_PLUGIN=true"
+    container_name: compass-debug-opensearch
+    hostname: opensearch
+    ports:
+      - 9200:9200
+
+  compass-debug:
+    build:
+      context: ./
+      dockerfile: dockerfiles/compass-debug.Dockerfile
+    ports:
+      - "7075:7075"   # portal web UI
+      - "7070:7070"   # collector
+      - "7071:7071"   # analyzer
+      - "5005:5005"   # debug: portal
+      - "5006:5006"   # debug: collector
+      - "5007:5007"   # debug: analyzer
+    environment:
+      - COMPASS_DEBUG=true
+      - JAVA_DEBUG_PORT_PORTAL=5005
+      - JAVA_DEBUG_PORT_COLLECTOR=5006
+      - JAVA_DEBUG_PORT_ANALYZER=5007
+    tty: true
+    container_name: compass-debug
+    profiles: ["compass-debug"]
+    depends_on:
+      - postgres
+      - kafka
+      - redis
+      - opensearch

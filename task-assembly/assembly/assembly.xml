@@ -19,34 +19,15 @@
             <outputDirectory>conf</outputDirectory>
         </fileSet>
 
+        <!-- New merged modules -->
         <fileSet>
-            <directory>${project.parent.basedir}/task-application/target/task-application</directory>
-            <outputDirectory>task-application</outputDirectory>
+            <directory>${project.parent.basedir}/task-collector/target/task-collector</directory>
+            <outputDirectory>task-collector</outputDirectory>
         </fileSet>
 
         <fileSet>
-            <directory>${project.parent.basedir}/task-canal/target/task-canal</directory>
-            <outputDirectory>task-canal</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-canal-adapter/target/task-canal-adapter</directory>
-            <outputDirectory>task-canal-adapter</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-detect/target/task-detect</directory>
-            <outputDirectory>task-detect</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-metadata/target/task-metadata</directory>
-            <outputDirectory>task-metadata</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-parser/target/task-parser</directory>
-            <outputDirectory>task-parser</outputDirectory>
+            <directory>${project.parent.basedir}/task-analyzer/target/task-analyzer</directory>
+            <outputDirectory>task-analyzer</outputDirectory>
         </fileSet>
 
         <fileSet>
@@ -59,14 +40,5 @@
             <outputDirectory>task-syncer</outputDirectory>
         </fileSet>
 
-        <fileSet>
-            <directory>${project.parent.basedir}/task-flink/target/task-flink</directory>
-            <outputDirectory>task-flink</outputDirectory>
-        </fileSet>
-
-        <fileSet>
-            <directory>${project.parent.basedir}/task-gpt/target/task-gpt</directory>
-            <outputDirectory>task-gpt</outputDirectory>
-        </fileSet>
     </fileSets>
 </assembly>

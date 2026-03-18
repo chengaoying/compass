@@ -16,36 +16,36 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Flow implements Serializable {
-    @ApiModelProperty(value = "Flow id")
+    @Schema(description = "Flow id")
     private Integer id;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Description")
+    @Schema(description = "Description")
     private String description;
 
-    @ApiModelProperty(value = "Flow creator id")
+    @Schema(description = "Flow creator id")
     private Integer userId;
 
-    @ApiModelProperty(value = "Flow enable status: 0->disabled; 1->enabled")
+    @Schema(description = "Flow enable status: 0->disabled; 1->enabled")
     private Integer flowStatus;
 
-    @ApiModelProperty(value = "Project id")
+    @Schema(description = "Project id")
     private Integer projectId;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;

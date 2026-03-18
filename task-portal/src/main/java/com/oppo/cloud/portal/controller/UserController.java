@@ -19,8 +19,8 @@ package com.oppo.cloud.portal.controller;
 import com.oppo.cloud.common.api.CommonStatus;
 import com.oppo.cloud.portal.domain.user.LoginRequest;
 import com.oppo.cloud.portal.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @Controller
-@Api(value = "UserController", description = "user api")
+@Tag(name = "UserController", description = "user api")
 @RequestMapping("/user")
 public class UserController {
 
@@ -42,7 +42,7 @@ public class UserController {
     /**
      * login api
      */
-    @ApiOperation("login")
+    @Operation(summary = "login")
     @PostMapping(value = "/login")
     @ResponseBody
     public CommonStatus<?> login(HttpServletResponse httpServletResponse, @RequestBody LoginRequest loginRequest) throws Exception {

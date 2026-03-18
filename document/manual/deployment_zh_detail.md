@@ -10,12 +10,10 @@ compass
 │   └── stop_all.sh                     停止脚本
 ├── conf
 │   └── application-hadoop.yml          hadoop相关配置
-├── task-application                    关联任务实例、applicationId、hdfs_log_path
+├── task-collector                      采集任务实例、关联applicationId及HDFS日志路径、同步Yarn/Spark元数据
 ├── task-canal                          订阅调度平台MySQL表元数据到Kafka
 ├── task-canal-adapter                  同步调度平台MySQL表元数据Compass平台
-├── task-detect                         工作流层异常类型检测
-├── task-metadata                       同步Yarn、Spark任务元数据到OpenSearch
-├── task-parser                         日志解析和Spark任务异常检测
+├── task-analyzer                       工作流层异常检测和引擎层日志解析诊断
 ├── task-portal                         异常任务的可视化服务
 ├── task-flink                          Flink任务资源及异常诊断
 ├── task-flink-core                     Flink任务诊断规则逻辑
@@ -327,28 +325,28 @@ task_instance表映射：
     queries: [ "select t2.schedule_time as execution_time, t3.name as flow_name, t4.name as project_name from t_ds_task_instance as t1 inner join t_ds_process_instance as t2 on t1.process_instance_id = t2.id inner join t_ds_process_definition as t3 on t2.process_definition_code = t3.code inner join t_ds_project as t4 on t3.project_code=t4.code where t1.id=${id}" ]
 ```
 
-## task-application
+## task-collector
 
-task-application模块关联task_name、applicationId、hdfs_log_path，该模块需要读取调度平台日志，推荐使用flume收集到hdfs，方便统一做日志诊断和分析。
+task-collector模块整合了数据采集职责：关联task_name、applicationId、hdfs_log_path（原task-application功能），并定时同步Yarn ResourceManager、Spark HistoryServer App元数据（原task-metadata功能）。
 
 ```
-task-application/
+task-collector/
 ├── bin
-│   ├── compass_env.sh
-│   ├── startup.sh
-│   └── stop.sh
+│   ├── compass_env.sh
+│   ├── startup.sh
+│   └── stop.sh
 ├── conf
-│   ├── application-airflow.yml
-│   ├── application-dolphinscheduler.yml
-│   ├── application-hadoop.yml
-│   ├── application.yml
-│   └── logback.xml
+│   ├── application-airflow.yml
+│   ├── application-dolphinscheduler.yml
+│   ├── application-hadoop.yml
+│   ├── application.yml
+│   └── logback.xml
 ├── lib
 ```
 
-### 核心配置
+### 配置
 
-conf/application-hadoop.yml
+conf/application-hadoop.yml — HDFS namenode及Yarn/Spark集群配置：
 
 ```
 hadoop:
@@ -360,66 +358,7 @@ hadoop:
       password:
       port: 8020
       matchPathKeys: [ "flume" ]
-```
 
-conf/application-dolphinscheduler/airflow/custom.yml
-
-该配置涉及日志路径规则的拼接，即日志绝对路径的确定。以flume收集dolphinscheduler到hdfs为例，airflow等同理。
-表t_ds_task_instance记录了日志路径log_path,但这个是worker主机中的目录，上传到hdfs的目录有所变化。
-
-例如:
-
-scheduler worker log_path: /home/service/app/dolphinscheduler/logs/8590950992992_2/33552/33934.log
-
-hdfs log_path: hdfs://log-hdfs:8020/flume/dolphinscheduler/2023-03-30/8590950992992_2/33552/xxx
-
-因此需要根据上面的变化关系，通过逐级目录确定绝对路径，然后最终确定 task_name,application_id,hdfs_log_path
-之间的关系存储到表task_application中。
-
-```
-custom:
-  # 从上到下串行执行解析到任务的applicationId
-  rules:
-    - logPathDep:
-        # 变量依赖查询
-        query: "select CASE WHEN end_time IS NOT NULL THEN DATE_ADD(end_time, INTERVAL 1 second) ELSE start_time END as end_time,log_path from t_ds_task_instance where id=${id}"     # 查询, id 是 task-instance表的id
-      logPathJoins: 
-        # end_time: 2023-02-18 01:43:11
-        # log_path: ../logs/6354680786144_1/3/4.log
-        - { "column": "", "data": "/flume/dolphinscheduler" } # 配置存储调度日志的hdfs根目录
-        - { "column": "end_time", "regex": "^.*(?<date>\\d{4}-\\d{2}-\\d{2}).+$", "name": "date" }
-        - { "column": "log_path", "regex": "^.*logs/(?<logpath>.*)$", "name": "logpath" }
-      extractLog: # 根据组装的日志路径解析日志
-        regex: "^.*Submitted application (?<applicationId>application_[0-9]+_[0-9]+).*$"     # 匹配规则
-        name: "applicationId"      # 匹配文本名，最后必须有applicationId
-```
-
-注意：原生flume-taildir-source插件是不支持递归遍历子目录文件的，需要进行改造。如果您日志已经收集，可忽略。
-如果您还没有收集，可修改TaildirMatcher.getMatchingFilesNoCache()方法实现。
-如果你使用的是Airflow，生成的日志目录可能包含不符合hdfs目录规则，sink to hdfs时需要修改替换目录特殊字符为下划线‘_’。
-
-## task-metadata
-
-task-metadata模块是用于同步Yarn、Spark任务applicationId列表，关联applicationId的driver、executor、eventlog日志存储路径
-
-```
-task-metadata
-├── bin
-│   ├── compass_env.sh
-│   ├── startup.sh
-│   └── stop.sh
-├── conf
-│   ├── application.yml
-│   └── logback.xml
-├── lib
-```
-
-### 核心配置
-
-conf/application.yml
-
-```
-hadoop:
   yarn:
     - clusterName: "bigdata"
       resourceManager: [ "ip:port" ]
@@ -429,119 +368,55 @@ hadoop:
     sparkHistoryServer: [ "ip:port" ]
 ```
 
-## task-detect
-
-task-detect模块是针对工作流层异常检测，异常类型包括运行失败、基线时间异常、基线耗时异常、首次失败、长期失败、运行耗时长
+`conf/application-dolphinscheduler/airflow/custom.yml` — 日志路径拼接规则，用于从调度日志中提取applicationId：
 
 ```
-task-detect
+custom:
+  rules:
+    - logPathDep:
+        query: "select CASE WHEN end_time IS NOT NULL THEN DATE_ADD(end_time, INTERVAL 1 second) ELSE start_time END as end_time,log_path from t_ds_task_instance where id=${id}"
+      logPathJoins:
+        - { "column": "", "data": "/flume/dolphinscheduler" }
+        - { "column": "end_time", "regex": "^.*(?<date>\\d{4}-\\d{2}-\\d{2}).+$", "name": "date" }
+        - { "column": "log_path", "regex": "^.*logs/(?<logpath>.*)$", "name": "logpath" }
+      extractLog:
+        regex: "^.*Submitted application (?<applicationId>application_[0-9]+_[0-9]+).*$"
+        name: "applicationId"
+```
+
+## task-analyzer
+
+task-analyzer模块整合了工作流层异常检测（原task-detect）和引擎层日志解析诊断（原task-parser）。支持：运行失败、基线耗时异常、SQL失败、Shuffle失败、内存溢出、CPU/内存浪费、数据倾斜等Spark/MR异常。
+
+```
+task-analyzer/
 ├── bin
-│   ├── compass_env.sh
-│   ├── startup.sh
-│   └── stop.sh
+│   ├── compass_env.sh
+│   ├── startup.sh
+│   └── stop.sh
 ├── conf
-│   ├── application.yml
+│   ├── application-hadoop.yml
+│   ├── application.yml
+│   ├── logback.xml
+│   ├── rules.json
+│   └── scripts
+│       └── logRecordConsumer.lua
 ├── lib
 ```
 
-### 核心配置
+### 配置
 
-conf/application.yml
+conf/rules.json — 日志解析规则，支持scheduler/driver/executor/yarn日志类型。
+
+conf/application.yml — 检测规则及Spark事件日志检测器：
 
 ```
 custom:
   detectionRule:
-    # 运行耗时长配置，单位小时
-    durationWarning: 2
-    # 长期失败配置，单位天
-    alwaysFailedWarning: 10 
-```
-
-## task-parser
-
-task-parser模块是针对Spark任务和相关日志进行解析诊断，异常类型包括：SQL失败、Shuffle失败、内存溢出、内存浪费、CPU浪费、大表扫描、OOM预警、
-数据倾斜、Job耗时异常、Stage耗时异常、Task长尾、HDFS卡顿、推迟执行Task过多、全局排序异常等
-
-```
-task-parser
-├── bin
-│   ├── compass_env.sh
-│   ├── startup.sh
-│   └── stop.sh
-├── conf
-│   ├── applicationbk.yml
-│   ├── application-hadoop.yml
-│   ├── application.yml
-│   ├── logback.xml
-│   ├── rules.json
-│   └── scripts
-│       └── logRecordConsumer.lua
-├── lib
-```
-
-### 核心配置
-
-conf/rules.json 该配置是用于编写日志解析规则
-
-logType: scheduler/driver/executor/yarn 日志类型，若有其他日志，可自行实现
-
-action: 定义每个匹配规则名称
-
-desc： action描述
-
-category： 定义规则类型，例如shuffleFailed/sqlFailed等
-
-step: 匹配顺序，默认升序
-
-parserType: 匹配类型，默认 DEFAULT(按行或者块匹配)，JOIN(把结果合并成一行再匹配)
-
-parserTemplate: 文本解析模板，由首行、中间行和结束行组成。
-
-如果只是简单按行匹配，则只需要填写parserTemplate.heads即可；
-
-如果需要按文本块匹配，例如异常栈，则需要填写parserTemplate.heads和parserTemplate.tails确定首行和结束行规则；
-
-如果需要在文本块中匹配某一行，则需要填写parserTemplate.middles中间行规则。
-
-groupNames：用户提取正则匹配分组名称的值
-
-children: 用于嵌套规则，例如文本中有多个相同的异常栈(开始和结束标志一样)，如果需要区分成不同的action，那么就可以嵌套规则实现
-
-```
-  { 
-    "logType": "scheduler",
-    "actions": [
-      {
-        "action": "otherError",
-        "desc": "其他错误信息",
-        "category": "otherException",
-        "step": 1,
-        "skip": false,
-        "parserType": "DEFAULT",
-        "parserTemplate": {
-          "heads": [
-            "^.+ERROR.+$"
-          ],
-          "middles": [],
-          "tails": []
-        },
-        "groupNames": [],
-        "children": []
-      }
-    ]
-  }
-```
-
-conf/application.yml
-
-custom.detector用于配置检测Spark Event Log，比如Spark环境变量、内存浪费、大表扫描等异常检测类型
-
-```
-custom:
+    durationWarning: 2      # 单位：小时
+    alwaysFailedWarning: 10 # 单位：天
   detector:
     sparkEnvironmentConfig:
-      jvmInformation:
-        - Java Version
       sparkProperties:
         - spark.driver.memoryOverhead
         - spark.driver.memory
@@ -549,12 +424,10 @@ custom:
         - spark.executor.memory
         - spark.executor.cores
         - spark.dynamicAllocation.maxExecutors
-        - spark.default.parallelism
         - spark.sql.shuffle.partitions
-      systemProperties:
-        - sun.java.command
      ...
 ```
+
 
 ## task-gpt
 
@@ -607,7 +480,7 @@ task-portal
 
 ## 离线任务上报元数据诊断
 
-支持第三方上报Spark/MapReduce任务application元数据进行诊断，如果不需要同步调度平台元数据和日志，只要启动task-portal和task-parser模块。
+支持第三方上报Spark/MapReduce任务application元数据进行诊断，如果不需要同步调度平台元数据和日志，只要启动task-portal和task-analyzer模块。
 
 请求接口：http://[compass_host]/compass/openapi/offline/app/metadata
 
@@ -661,4 +534,4 @@ task-portal
 
 ## 一键诊断功能
 
-离线诊断支持全量(包含非调度平台提交任务)Spark/MapReduce任务进行一键诊断，如果仅需要体验该功能，只要启动task-portal、task-metadata和task-parser模块。
+离线诊断支持全量(包含非调度平台提交任务)Spark/MapReduce任务进行一键诊断，如果仅需要体验该功能，只要启动task-portal、task-collector和task-analyzer模块。

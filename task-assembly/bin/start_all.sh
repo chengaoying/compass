@@ -13,19 +13,19 @@ if [ -f ${ENV_SH} ]; then
   done
 fi
 
-# copy hadoop conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-application/conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-metadata/conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-parser/conf
-cp /${HOME_DIR}/conf/application-hadoop.yml ${HOME_DIR}/task-flink/conf
-
-TASK_CANAL_ENABLE=${TASK_CANAL_ENABLE:-"True"}
+# copy hadoop conf to modules that need it
+HADOOP_CONF="${HOME_DIR}/conf/application-hadoop.yml"
+if [ -f "${HADOOP_CONF}" ]; then
+  for target_dir in task-collector task-analyzer; do
+    if [ -d "${HOME_DIR}/${target_dir}/conf" ]; then
+      cp "${HADOOP_CONF}" "${HOME_DIR}/${target_dir}/conf/"
+    fi
+  done
+fi
 
 start() {
   for dir in ${HOME_DIR}/task-*; do
-    if [ "$TASK_CANAL_ENABLE" != "True" ] && [[ "$dir" == *task-canal* ]]; then
-      echo "Skip $dir"
-    elif [ -d $dir ]; then
+    if [ -d $dir ]; then
       cd $dir
       echo $dir
       bash bin/startup.sh

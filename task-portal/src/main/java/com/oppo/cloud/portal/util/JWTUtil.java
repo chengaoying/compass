@@ -20,25 +20,35 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.oppo.cloud.common.service.RedisService;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.model.UserInfo;
 import com.oppo.cloud.portal.domain.task.UserResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JWTUtil {
+
+    private static final String BLACKLIST_PREFIX = "jwt:blacklist:";
+
     @Value("${custom.jwt.expireDay}")
     private int expireDay = 7;
     @Value("${custom.jwt.secret}")
     private String secret;
 
+    @Autowired
+    private RedisService redisService;
+
     public String createToken(UserInfo user) throws Exception {
         boolean isAdmin = user.getIsAdmin() == 0;
         return JWT.create()
                 .withIssuer("compass")
+                .withJWTId(UUID.randomUUID().toString())
                 .withClaim("userId", user.getId())
                 .withClaim("username", user.getUsername())
                 .withClaim("isAdmin", isAdmin)
@@ -52,6 +62,13 @@ public class JWTUtil {
                 .withIssuer("compass")
                 .build();
         DecodedJWT decodedJWT = verifier.verify(token);
+
+        // Check if token has been invalidated (logout)
+        String jti = decodedJWT.getId();
+        if (jti != null && Boolean.TRUE.equals(redisService.hasKey(BLACKLIST_PREFIX + jti))) {
+            throw new RuntimeException("Token has been invalidated");
+        }
+
         Integer userId = decodedJWT.getClaim("userId").asInt();
         String username = decodedJWT.getClaim("username").asString();
         Boolean isAdmin = decodedJWT.getClaim("isAdmin").asBoolean();
@@ -64,4 +81,22 @@ public class JWTUtil {
         return userInfo;
     }
 
+    /**
+     * Invalidate a token by adding its JTI to the Redis blacklist.
+     * The blacklist entry expires when the token would have expired.
+     */
+    public void invalidateToken(String token) {
+        try {
+            DecodedJWT decodedJWT = JWT.decode(token);
+            String jti = decodedJWT.getId();
+            if (jti != null) {
+                long ttlSeconds = (decodedJWT.getExpiresAt().getTime() - System.currentTimeMillis()) / 1000;
+                if (ttlSeconds > 0) {
+                    redisService.set(BLACKLIST_PREFIX + jti, "1", ttlSeconds);
+                }
+            }
+        } catch (Exception ignored) {
+            // Token may already be expired or malformed — ignore
+        }
+    }
 }

@@ -37,7 +37,7 @@ public class TaskAppMapping extends Mapping {
         return Stream.of(
                         /* application ID */
                         new AbstractMap.SimpleEntry<>("applicationId", text()),
-                        /* application type： Spark, MR... */
+                        /* application type: Spark, Flink... */
                         new AbstractMap.SimpleEntry<>("applicationType", text()),
                         /* execute user */
                         new AbstractMap.SimpleEntry<>("executeUser", text()),

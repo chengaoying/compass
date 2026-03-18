@@ -16,12 +16,12 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 
 public class TaskSyncerInit implements Serializable {
 
-    @ApiModelProperty(value = "Whether the task_syncer application has been initialized: 0 -> No, 1 -> Yes")
+    @Schema(description = "Whether the task_syncer application has been initialized: 0 -> No, 1 -> Yes")
     private Integer isInit;
 
     private static final long serialVersionUID = 1L;

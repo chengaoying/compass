@@ -146,7 +146,7 @@ fi
 
 ```
 hadoop:
-  # Configuration dependency for task-application & task-parser modules
+  # Configuration dependency for task-collector & task-analyzer modules
   namenodes:
     - nameservices: logs-hdfs               # dfs.nameservices value
       namenodesAddr: [ "machine1.example.com", "machine2.example.com" ]   # dfs.namenode.rpc-address.[nameservice ID].[name node ID] value
@@ -154,7 +154,7 @@ hadoop:
       user: hdfs                            # user
       password:                             # password，empty if no password
       port: 8020                            # port
-      matchPathKeys: [ "flume" ]            # Usage of the task-application module, keywords for the HDFS path of the scheduling platform log
+      matchPathKeys: [ "flume" ]            # Used by task-collector: keywords for the HDFS path of the scheduling platform log
       # kerberos
       enableKerberos: false
       # /etc/krb5.conf
@@ -166,7 +166,7 @@ hadoop:
       # /var/kerberos/krb5kdc/admin.keytab
       keytabPath: ""
   
-  # Configuration dependency for the task-metadata module
+  # Configuration dependency for the task-collector module
   yarn:
     - clusterName: "bigdata"
       resourceManager: [ "ip:port" ] # yarn.resourcemanager.webapp.address 

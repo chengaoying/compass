@@ -17,36 +17,36 @@
 package com.oppo.cloud.portal.domain.diagnose.oneclick;
 
 import com.oppo.cloud.portal.domain.task.TaskAppInfo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ApiModel("result of one-click diagnosis")
+@Schema(name = "result of one-click diagnosis")
 public class DiagnoseResult {
 
-    @ApiModelProperty(value = "diagnosing status(failed, success, processing)")
+    @Schema(description = "diagnosing status(failed, success, processing)")
     private String status;
 
-    @ApiModelProperty(value = "processing information")
+    @Schema(description = "processing information")
     private List<ProcessInfo> processInfoList = new ArrayList<>();
 
-    @ApiModelProperty(value = "task information")
+    @Schema(description = "task information")
     private TaskAppInfo taskAppInfo;
 
-    @ApiModelProperty(value = "exception")
+    @Schema(description = "exception")
     private String errorMsg;
 
     @Data
-    @ApiModel("processing information")
+    @Schema(name = "processing information")
     public static class ProcessInfo {
 
-        @ApiModelProperty(value = "message")
+        @Schema(description = "message")
         private String msg;
-        @ApiModelProperty(value = "speed")
+        @Schema(description = "speed")
         private double speed;
         public ProcessInfo(String msg, double speed) {
             this.msg = msg;

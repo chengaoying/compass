@@ -16,23 +16,23 @@
 
 package com.oppo.cloud.portal.domain.diagnose.info;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel("Yarn cluster information")
+@Schema(name = "Yarn cluster information")
 public class ClusterInfo {
 
-    @ApiModelProperty(value = "cluster name")
+    @Schema(description = "cluster name")
     private String clusterName;
 
-    @ApiModelProperty(value = "queue")
+    @Schema(description = "queue")
     private String executeQueue;
 
-    @ApiModelProperty(value = "user")
+    @Schema(description = "user")
     private String executeUser;
 
-    @ApiModelProperty(value = "SparkUi")
+    @Schema(description = "SparkUi")
     private String sparkUi;
 }

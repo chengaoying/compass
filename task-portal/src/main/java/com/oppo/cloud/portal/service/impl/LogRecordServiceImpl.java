@@ -86,7 +86,7 @@ public class LogRecordServiceImpl implements LogRecordService {
     }
 
     /**
-     * get spark/mapreduce log path info
+     * get spark log path info
      */
     private LogInfo getLogInfo(AppDiagnosisMetadata appInfo) {
         LogInfo logInfo = new LogInfo();
@@ -104,25 +104,6 @@ public class LogRecordServiceImpl implements LogRecordService {
             logPathMap.put(LogType.SPARK_EVENT.getName(), sparkEventLogPath);
 
             logPathMap.put(LogType.SPARK_EXECUTOR.getName(), sparkExecutorLogPath);
-
-            logInfo.setLogPathMap(logPathMap);
-        }
-
-        if (ApplicationType.MAPREDUCE.getValue().equals(appInfo.getApplicationType())) {
-            logInfo.setLogGroup(LogGroupType.MAPREDUCE.getName());
-            String jobId = LogPathUtil.appIdToJobId(appInfo.getApplicationId());
-            String logSubdirectory = LogPathUtil.getHistoryLogSubdirectory(appInfo.getApplicationId(), appInfo.getFinishedTime());
-
-            List<LogPath> mrEventLogPath = Collections.singletonList(new LogPath(ProtocolType.HDFS.getName(),
-                    LogType.MAPREDUCE_JOB_HISTORY.getName(), LogPathType.PATTERN,
-                    String.format("%s/%s%s*", appInfo.getMapreduceEventLogDirectory(), logSubdirectory, jobId)));
-
-            List<LogPath> mrContainerLogPath = Collections.singletonList(new LogPath(ProtocolType.HDFS.getName(),
-                    LogType.MAPREDUCE_CONTAINER.getName(), LogPathType.DIRECTORY, appInfo.getMapreduceContainerLogDirectory()));
-
-            logPathMap.put(LogType.MAPREDUCE_JOB_HISTORY.getName(), mrEventLogPath);
-
-            logPathMap.put(LogType.MAPREDUCE_CONTAINER.getName(), mrContainerLogPath);
 
             logInfo.setLogPathMap(logPathMap);
         }

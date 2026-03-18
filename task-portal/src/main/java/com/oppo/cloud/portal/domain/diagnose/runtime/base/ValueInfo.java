@@ -16,19 +16,19 @@
 
 package com.oppo.cloud.portal.domain.diagnose.runtime.base;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 
 @Data
-@ApiModel("Value information")
+@Schema(name = "Value information")
 public class ValueInfo {
 
-    @ApiModelProperty(value = "value")
+    @Schema(description = "value")
     private double value;
 
-    @ApiModelProperty(value = "type")
+    @Schema(description = "type")
     private String type;
 
     public ValueInfo(double value, String type) {

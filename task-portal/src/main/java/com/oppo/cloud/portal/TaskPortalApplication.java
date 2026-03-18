@@ -19,11 +19,9 @@ package com.oppo.cloud.portal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @SpringBootApplication(scanBasePackages = "com.oppo.cloud")
 @EnableScheduling
-@EnableOpenApi
 public class TaskPortalApplication {
 
     public static void main(String[] args) {

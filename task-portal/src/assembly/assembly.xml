@@ -21,10 +21,6 @@
             </excludes>
             <outputDirectory>conf</outputDirectory>
         </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/../task-ui/dist</directory>
-            <outputDirectory>portal</outputDirectory>
-        </fileSet>
     </fileSets>
     <dependencySets>
         <dependencySet>

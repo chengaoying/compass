@@ -19,7 +19,7 @@ package com.oppo.cloud.portal.controller;
 import com.oppo.cloud.common.api.CommonStatus;
 import com.oppo.cloud.portal.domain.app.AppDiagnosisMetadata;
 import com.oppo.cloud.portal.service.LogRecordService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +37,7 @@ public class LogRecordController {
     private LogRecordService logRecordService;
 
     @PostMapping("/openapi/offline/app/metadata")
-    @ApiOperation(value = "report spark, may include scheduler information")
+    @Operation(summary = "report spark, may include scheduler information")
     @ResponseBody
     public CommonStatus<?> reportLogRecord(@RequestBody @Valid AppDiagnosisMetadata appInfo) throws Exception {
         logRecordService.reportLogRecord(appInfo);

@@ -18,12 +18,13 @@ package com.oppo.cloud.portal.config;
 
 import com.oppo.cloud.portal.interceptor.LoginCheckInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -32,6 +33,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -39,29 +41,40 @@ import java.util.Locale;
  */
 @Configuration
 @EnableWebSecurity
-public class PortalSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+public class PortalSecurityConfig implements WebMvcConfigurer {
 
     @Autowired
     private LoginCheckInterceptor loginCheckInterceptor;
 
+    @Value("${custom.cors.allowed-origins:*}")
+    private String allowedOrigins;
 
-    @Override
-    public void configure(final HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.headers().httpStrictTransportSecurity().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-        http.antMatcher("/*").authorizeRequests().anyRequest().permitAll();
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            // CSRF disabled because the API uses stateless JWT authentication;
+            // browser clients are protected by SameSite cookies and CORS restrictions.
+            .csrf(csrf -> csrf.disable())
+            .headers(headers -> headers
+                .httpStrictTransportSecurity(hsts -> hsts.disable()))
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll());
+        return http.build();
     }
 
     /**
-     * Cross domain configuration
+     * CORS configuration — restrict allowed origins via custom.cors.allowed-origins property.
+     * Defaults to "*" for development; should be set to specific origins in production.
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowCredentials(true)
-                .allowedMethods("*")
+                .allowedOriginPatterns(allowedOrigins.split(","))
+                .allowCredentials(!"*".equals(allowedOrigins))
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("Authorization", "Content-Type", "Accept", "X-Requested-With")
                 .maxAge(3600);
     }
 
@@ -76,9 +89,7 @@ public class PortalSecurityConfig extends WebSecurityConfigurerAdapter implement
     public LocaleChangeInterceptor localeChangeInterceptor() {
         return new LocaleChangeInterceptor();
     }
-    /**
-     * Add interceptors
-     */
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
@@ -101,12 +112,11 @@ public class PortalSecurityConfig extends WebSecurityConfigurerAdapter implement
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOriginPattern("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOriginPatterns(List.of(allowedOrigins.split(",")));
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept", "X-Requested-With"));
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowCredentials(!"*".equals(allowedOrigins));
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
-
 }

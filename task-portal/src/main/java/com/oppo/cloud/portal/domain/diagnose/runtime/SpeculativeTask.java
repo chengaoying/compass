@@ -19,7 +19,7 @@ package com.oppo.cloud.portal.domain.diagnose.runtime;
 import com.oppo.cloud.portal.domain.diagnose.Chart;
 import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.runtime.base.MetricInfo;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -28,6 +28,6 @@ import java.util.List;
 @Data
 public class SpeculativeTask extends IsAbnormal {
 
-    @ApiModelProperty(value = "chart list")
+    @Schema(description = "chart list")
     private List<Chart<MetricInfo>> chartList = new ArrayList<>();
 }

@@ -72,24 +72,6 @@ public class Initializer implements CommandLineRunner {
     @Value(value = "${custom.opensearch.jobInstanceIndex.replicas}")
     private Integer jobInstanceIndexReplicas;
 
-    @Value(value = "${custom.opensearch.flinkReportIndex.name}")
-    private String flinkReportIndex;
-
-    @Value(value = "${custom.opensearch.flinkReportIndex.shards}")
-    private Integer flinkReportIndexShards;
-
-    @Value(value = "${custom.opensearch.flinkReportIndex.replicas}")
-    private Integer flinkReportIndexReplicas;
-
-    @Value(value = "${custom.opensearch.flinkTaskAnalysisIndex.name}")
-    private String flinkTaskAnalysisIndex;
-
-    @Value(value = "${custom.opensearch.flinkTaskAnalysisIndex.shards}")
-    private Integer flinkTaskAnalysisIndexShards;
-
-    @Value(value = "${custom.opensearch.flinkTaskAnalysisIndex.replicas}")
-    private Integer flinkTaskAnalysisIndexReplicas;
-
     @Autowired
     @Qualifier("opensearch")
     private RestHighLevelClient client;
@@ -113,20 +95,6 @@ public class Initializer implements CommandLineRunner {
             AcknowledgedResponse response = mappingApi.putTemplate(client, appIndex,
                     new String[]{appIndex + "-*"}, mapping, appIndexShards, appIndexReplicas);
             log.info("Create opensearch template {}, result: {}", appIndex, response.isAcknowledged());
-        }
-
-        if (!mappingApi.existsTemplate(client, flinkReportIndex)) {
-            Map<String, Object> mapping = FlinkReportMapping.build(true);
-            AcknowledgedResponse response = mappingApi.putTemplate(client, flinkReportIndex,
-                    new String[]{flinkReportIndex + "-*"}, mapping, flinkReportIndexShards, flinkReportIndexReplicas);
-            log.info("Create opensearch template {}, result: {}", flinkReportIndex, response.isAcknowledged());
-        }
-
-        if (!mappingApi.existsTemplate(client, flinkTaskAnalysisIndex)) {
-            Map<String, Object> mapping = FlinkTaskAnalysisMapping.build(true);
-            AcknowledgedResponse response = mappingApi.putTemplate(client, flinkTaskAnalysisIndex,
-                    new String[]{flinkTaskAnalysisIndex + "-*"}, mapping, flinkTaskAnalysisIndexShards, flinkTaskAnalysisIndexReplicas);
-            log.info("Create opensearch template {}, result: {}", flinkTaskAnalysisIndex, response.isAcknowledged());
         }
 
         // spark log summary

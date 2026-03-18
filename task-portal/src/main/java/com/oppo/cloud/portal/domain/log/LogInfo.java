@@ -21,8 +21,8 @@ import com.oppo.cloud.common.domain.opensearch.TaskApp;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.model.TaskDiagnosisAdvice;
 import com.oppo.cloud.portal.util.MessageSourceUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -32,25 +32,25 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@ApiModel("Log information")
+@Schema(name = "Log information")
 public class LogInfo {
 
-    @ApiModelProperty(value = "log type")
+    @Schema(description = "log type")
     private String logType;
 
-    @ApiModelProperty(value = "event description")
+    @Schema(description = "event description")
     private String event;
 
-    @ApiModelProperty(value = "time")
+    @Schema(description = "time")
     private String logTime;
 
-    @ApiModelProperty(value = "log content")
+    @Schema(description = "log content")
     private String logContent;
 
-    @ApiModelProperty(value = "advice")
+    @Schema(description = "advice")
     private String advice;
 
-    @ApiModelProperty(value = "action")
+    @Schema(description = "action")
     private String action;
 
     public static LogInfo genLogInfo(LogSummary logSum, TaskDiagnosisAdvice diagnoseAdvice) throws Exception {

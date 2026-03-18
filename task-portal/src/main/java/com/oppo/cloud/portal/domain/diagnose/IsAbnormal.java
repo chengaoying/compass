@@ -16,21 +16,21 @@
 
 package com.oppo.cloud.portal.domain.diagnose;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
-@ApiModel("Abnormal item")
+@Schema(name = "Abnormal item")
 public class IsAbnormal {
 
     private Boolean abnormal = false;
 
     private String info;
 
-    @ApiModelProperty(value = "Local variables required for analysis conclusions")
+    @Schema(description = "Local variables required for analysis conclusions")
     private Map<String, String> vars = new HashMap<>();
 }

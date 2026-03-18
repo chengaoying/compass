@@ -17,8 +17,8 @@
 package com.oppo.cloud.common.domain.gc;
 
 import com.oppo.cloud.common.util.DateUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -29,93 +29,93 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@ApiModel("GC log analysis.")
+@Schema(name = "GC log analysis.")
 public class GCReport {
 
     /**
      * Executor ID corresponding to the GC log.
      */
-    @ApiModelProperty(value = "Executor ID corresponding to the GC log.")
+    @Schema(description = "Executor ID corresponding to the GC log.")
     private Integer executorId;
     /**
      * Maximum allocated memory.
      */
-    @ApiModelProperty(value = "Maximum allocated memory.")
+    @Schema(description = "Maximum allocated memory.")
     private Integer maxHeapAllocatedSize;
     /**
      * Maximum memory usage.
      */
-    @ApiModelProperty(value = "Maximum memory usage.")
+    @Schema(description = "Maximum memory usage.")
     private Integer maxHeapUsedSize;
     /**
      * Running time.
      */
-    @ApiModelProperty(value = "Running time.")
+    @Schema(description = "Running time.")
     private String totalTime;
     /**
      * Number of young GCs.
      */
-    @ApiModelProperty(value = "Number of young GCs.")
+    @Schema(description = "Number of young GCs.")
     private Integer youngGCCount;
     /**
      * Young GC time.
      */
-    @ApiModelProperty(value = "Young GC time.")
+    @Schema(description = "Young GC time.")
     private Double youngGCTime;
     /**
      * Number of full GCs.
      */
-    @ApiModelProperty(value = "Number of full GCs.")
+    @Schema(description = "Number of full GCs.")
     private Integer fullGCCount;
     /**
      * Full GC time.
      */
-    @ApiModelProperty(value = "Full GC time.")
+    @Schema(description = "Full GC time.")
     private Double fullGCTime;
     /**
      * Total number of GCs.
      */
-    @ApiModelProperty(value = "Total number of GCs.")
+    @Schema(description = "Total number of GCs.")
     private Integer totalGCCount;
     /**
      * Total GC time.
      */
-    @ApiModelProperty(value = "Total GC time.")
+    @Schema(description = "Total GC time.")
     private Double totalGCTime;
     /**
      * Heap usage trend chart.
      */
-    @ApiModelProperty(value = "Heap usage trend chart.")
+    @Schema(description = "Heap usage trend chart.")
     private List<HeapUsed> heapUsed;
     /**
      * Tenured usage trend chart.
      */
-    @ApiModelProperty(value = "Tenured usage trend chart.")
+    @Schema(description = "Tenured usage trend chart.")
     private List<TenuredUsed> tenuredUsed;
     /**
      * Young usage trend chart.
      */
-    @ApiModelProperty(value = "Young usage trend chart.")
+    @Schema(description = "Young usage trend chart.")
     private List<YoungUsed> youngUsed;
     /**
      * appId
      */
-    @ApiModelProperty(value = "appId")
+    @Schema(description = "appId")
     private String applicationId;
     /**
      * Log type: driver executor.
      */
-    @ApiModelProperty(value = "Log type: driver executor.")
+    @Schema(description = "Log type: driver executor.")
     private String logType;
     /**
      * Log path in hdfs
      */
-    @ApiModelProperty(value = "Log path in hdfs")
+    @Schema(description = "Log path in hdfs")
     private String logPath;
     /**
      * Executor's memory usage.
      */
-    @ApiModelProperty(value = "Executor's memory usage.")
+    @Schema(description = "Executor's memory usage.")
     private List<ExecutorPeakMemory> executorPeakMemory;
 
     public Map<String, Object> genDoc() throws Exception {

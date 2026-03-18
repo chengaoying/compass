@@ -16,7 +16,7 @@
 
 package com.oppo.cloud.portal.domain.task;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -25,10 +25,10 @@ import java.util.Map;
 @Data
 public class JobAppsRespone {
 
-    @ApiModelProperty(value = "job information")
+    @Schema(description = "job information")
     JobInfo jobInfo;
 
-    @ApiModelProperty(value = "taskApps data")
+    @Schema(description = "taskApps data")
     Map<String, List<TaskAppInfo>> taskApps;
 
 }

@@ -17,7 +17,7 @@
 package com.oppo.cloud.portal.domain.diagnose.runtime;
 
 import com.oppo.cloud.portal.domain.diagnose.Table;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -26,6 +26,6 @@ import java.util.List;
 @Data
 public class TableData<T> {
 
-    @ApiModelProperty(value = "table information")
+    @Schema(description = "table information")
     List<Table<T>> tableList = new ArrayList<>();
 }

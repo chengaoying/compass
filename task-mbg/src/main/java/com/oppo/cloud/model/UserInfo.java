@@ -16,48 +16,48 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class UserInfo implements Serializable {
-    @ApiModelProperty(value = "User record id")
+    @Schema(description = "User record id")
     private Integer id;
 
-    @ApiModelProperty(value = "User ID, consistent with other systems")
+    @Schema(description = "User ID, consistent with other systems")
     private Integer userId;
 
-    @ApiModelProperty(value = "Username")
+    @Schema(description = "Username")
     private String username;
 
-    @ApiModelProperty(value = "Password")
+    @Schema(description = "Password")
     private String password;
 
-    @ApiModelProperty(value = "Is it an administrator")
+    @Schema(description = "Is it an administrator")
     private Integer isAdmin;
 
-    @ApiModelProperty(value = "Icon: avatar")
+    @Schema(description = "Icon: avatar")
     private String icon;
 
-    @ApiModelProperty(value = "Email")
+    @Schema(description = "Email")
     private String email;
 
-    @ApiModelProperty(value = "Phone")
+    @Schema(description = "Phone")
     private String phone;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
-    @ApiModelProperty(value = "Last login time")
+    @Schema(description = "Last login time")
     private Date loginTime;
 
-    @ApiModelProperty(value = "Account activation status: 0->disabled; 1->enabled")
+    @Schema(description = "Account activation status: 0->disabled; 1->enabled")
     private Integer status;
 
-    @ApiModelProperty(value = "scheduler type: dolphin, airflow, etc")
+    @Schema(description = "scheduler type: dolphin, airflow, etc")
     private String schedulerType;
 
     private static final long serialVersionUID = 1L;
@@ -175,7 +175,7 @@ public class UserInfo implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
         sb.append(", username=").append(username);
-        sb.append(", password=").append(password);
+        sb.append(", password=").append("[REDACTED]");
         sb.append(", isAdmin=").append(isAdmin);
         sb.append(", icon=").append(icon);
         sb.append(", email=").append(email);

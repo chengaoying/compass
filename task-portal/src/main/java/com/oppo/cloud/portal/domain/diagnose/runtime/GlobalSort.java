@@ -19,7 +19,7 @@ package com.oppo.cloud.portal.domain.diagnose.runtime;
 import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.Table;
 import com.oppo.cloud.portal.util.MessageSourceUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.opensearch.common.inject.spi.Message;
 
@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 @Data
 public class GlobalSort extends IsAbnormal {
 
-    @ApiModelProperty(value = "table information")
+    @Schema(description = "table information")
     private Table<GlobalSortTable> table = new Table<>();
 
     public GlobalSort() {
@@ -45,19 +45,19 @@ public class GlobalSort extends IsAbnormal {
     @Data
     public static class GlobalSortTable {
 
-        @ApiModelProperty(value = "JobId")
+        @Schema(description = "JobId")
         private String jobId;
 
-        @ApiModelProperty(value = "stageId")
+        @Schema(description = "stageId")
         private String stageId;
 
-        @ApiModelProperty(value = "task number")
+        @Schema(description = "task number")
         private String taskNum;
 
-        @ApiModelProperty(value = "task size")
+        @Schema(description = "task size")
         private String dataOfColumns;
 
-        @ApiModelProperty(value = "duration")
+        @Schema(description = "duration")
         private String duration;
     }
 }

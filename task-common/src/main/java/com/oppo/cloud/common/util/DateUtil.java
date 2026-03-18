@@ -19,6 +19,8 @@ package com.oppo.cloud.common.util;
 import com.alibaba.fastjson2.JSONFactory;
 import com.alibaba.fastjson2.JSONReader;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -27,6 +29,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 
+@Slf4j
 public class DateUtil {
 
     private static Map<String, ThreadLocal<SimpleDateFormat>> thredlocalmap =
@@ -50,7 +53,7 @@ public class DateUtil {
         try {
             return sdf.parse(timeStr);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("Failed to parse date string '{}' with pattern '{}': {}", timeStr, pattern, e.getMessage());
         }
         return null;
     }

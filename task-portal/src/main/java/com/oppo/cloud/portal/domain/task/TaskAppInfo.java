@@ -22,8 +22,8 @@ import com.oppo.cloud.common.domain.opensearch.TaskApp;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.portal.util.TaskUtil;
 import com.oppo.cloud.portal.util.UnitUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,47 +31,47 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@ApiModel(value = "Application information")
+@Schema(name = "Application information")
 @NoArgsConstructor
 public class TaskAppInfo {
 
-    @ApiModelProperty(value = "appId")
+    @Schema(description = "appId")
     private String applicationId;
 
-    @ApiModelProperty(value = "application type")
+    @Schema(description = "application type")
     private String applicationType;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "execution date")
+    @Schema(description = "execution date")
     private String executionDate;
 
-    @ApiModelProperty(value = "categories")
+    @Schema(description = "categories")
     private List<String> categories;
 
-    @ApiModelProperty(value = "duration")
+    @Schema(description = "duration")
     private String duration;
 
-    @ApiModelProperty(value = "try number")
+    @Schema(description = "try number")
     private Integer tryNumber;
 
-    @ApiModelProperty(value = "resource")
+    @Schema(description = "resource")
     private String resource;
 
-    @ApiModelProperty(value = "users")
+    @Schema(description = "users")
     private String users;
 
-    @ApiModelProperty(value = "sparkUI")
+    @Schema(description = "sparkUI")
     private String sparkUI;
 
-    @ApiModelProperty(value = "task app state")
+    @Schema(description = "task app state")
     private String taskAppState;
 
     /**

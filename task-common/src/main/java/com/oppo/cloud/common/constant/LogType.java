@@ -27,9 +27,7 @@ public enum LogType {
     SPARK_DRIVER("driver", "Spark Driver Log"),
     SPARK_EXECUTOR("executor", "Spark Executor Log"),
     YARN("yarn", "Yarn Diagnostics Log"),
-    SPARK_GC("gc", "Spark GC Log"),
-    MAPREDUCE_JOB_HISTORY("jobhistory", "MapReduce JobHistory Log"),
-    MAPREDUCE_CONTAINER("mrContainer", "MapReduce Container Log");
+    SPARK_GC("gc", "Spark GC Log");
 
     private final String name;
 
