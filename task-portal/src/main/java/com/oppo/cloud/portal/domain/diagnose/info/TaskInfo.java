@@ -16,40 +16,40 @@
 
 package com.oppo.cloud.portal.domain.diagnose.info;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-@ApiModel("information of task")
+@Schema(name = "information of task")
 public class TaskInfo {
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "execution time")
+    @Schema(description = "execution time")
     private String executionTime;
 
-    @ApiModelProperty(value = "running duration of application")
+    @Schema(description = "running duration of application")
     private String appTime;
 
-    @ApiModelProperty(value = "applicationId")
+    @Schema(description = "applicationId")
     private String applicationId;
 
-    @ApiModelProperty(value = "categories of exception")
+    @Schema(description = "categories of exception")
     private List<String> categories;
 
-    @ApiModelProperty(value = "memory consuming")
+    @Schema(description = "memory consuming")
     private String memorySeconds;
 
-    @ApiModelProperty(value = "cpu consuming")
+    @Schema(description = "cpu consuming")
     private String vcoreSeconds;
 }

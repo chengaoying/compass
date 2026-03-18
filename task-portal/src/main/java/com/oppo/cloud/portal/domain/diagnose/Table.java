@@ -16,8 +16,8 @@
 
 package com.oppo.cloud.portal.domain.diagnose;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -26,15 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@ApiModel("Table")
+@Schema(name = "Table")
 public class Table<T> {
 
-    @ApiModelProperty(value = "titles")
+    @Schema(description = "titles")
     LinkedHashMap<String, String> titles = new LinkedHashMap<>();
 
-    @ApiModelProperty(value = "description")
+    @Schema(description = "description")
     private String des;
 
-    @ApiModelProperty(value = "data")
+    @Schema(description = "data")
     List<T> data = new ArrayList<>();
 }

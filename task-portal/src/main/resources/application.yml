@@ -18,7 +18,7 @@ spring:
     active:
   mvc:
     pathmatch:
-      matching-strategy: ANT_PATH_MATCHER
+      matching-strategy: PATH_PATTERN_PARSER
   main:
     allow-circular-references: true
   datasource:

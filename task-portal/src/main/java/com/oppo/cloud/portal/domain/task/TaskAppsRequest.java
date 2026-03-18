@@ -21,8 +21,8 @@ import com.oppo.cloud.common.constant.AppCategoryEnum;
 import com.oppo.cloud.common.constant.JobCategoryEnum;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.portal.config.ThreadLocalUserInfo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.opensearch.search.sort.SortOrder;
@@ -37,38 +37,38 @@ import java.util.Map;
  * ApplicationId request information
  */
 @Data
-@ApiModel(value = "ApplicationId request information")
+@Schema(name = "ApplicationId request information")
 public class TaskAppsRequest {
 
-    @ApiModelProperty(value = "applicationId")
+    @Schema(description = "applicationId")
     private String applicationId;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "start time")
+    @Schema(description = "start time")
     private long start = 0;
 
-    @ApiModelProperty(value = "end time")
+    @Schema(description = "end time")
     private long end = 0;
 
-    @ApiModelProperty(value = "username")
+    @Schema(description = "username")
     private String username;
 
-    @ApiModelProperty(value = "categories")
+    @Schema(description = "categories")
     private List<String> categories;
 
-    @ApiModelProperty(value = "page")
+    @Schema(description = "page")
     @Min(value = 1, message = "\"page cannot be less than 1")
     private Integer page = 1;
 
-    @ApiModelProperty(value = "number per page")
+    @Schema(description = "number per page")
     @Max(value = 500, message = "pageSize cannot be greater than 500")
     private Integer pageSize = 15;
 

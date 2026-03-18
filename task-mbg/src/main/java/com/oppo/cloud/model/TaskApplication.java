@@ -16,7 +16,7 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -25,37 +25,37 @@ import java.util.Date;
 @Data
 public class TaskApplication implements Serializable {
 
-    @ApiModelProperty(value = "Task application record id")
+    @Schema(description = "Task application record id")
     private Integer id;
 
-    @ApiModelProperty(value = "AppId(yarn application)")
+    @Schema(description = "AppId(yarn application)")
     private String applicationId;
 
-    @ApiModelProperty(value = "Task name")
+    @Schema(description = "Task name")
     private String taskName;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Task plan execution time")
+    @Schema(description = "Task plan execution time")
     private Date executeTime;
 
-    @ApiModelProperty(value = "Task retry nth time")
+    @Schema(description = "Task retry nth time")
     private Integer retryTimes;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
-    @ApiModelProperty(value = "Task scheduler log, multiple separated by commas")
+    @Schema(description = "Task scheduler log, multiple separated by commas")
     private String logPath;
 
-    @ApiModelProperty(value = "Task type(Spark、Flink)")
+    @Schema(description = "Task type(Spark、Flink)")
     private String taskType;
 
     private static final long serialVersionUID = 1L;

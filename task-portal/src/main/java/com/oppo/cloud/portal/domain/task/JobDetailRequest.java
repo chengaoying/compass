@@ -19,7 +19,7 @@ package com.oppo.cloud.portal.domain.task;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oppo.cloud.common.util.DateUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.opensearch.search.sort.SortOrder;
@@ -32,24 +32,24 @@ import java.util.Map;
 @Data
 public class JobDetailRequest {
 
-    @ApiModelProperty("project name")
+    @Schema(description = "project name")
     @NotNull
     private String projectName;
 
-    @ApiModelProperty("flow name")
+    @Schema(description = "flow name")
     @NotNull
     private String flowName;
 
-    @ApiModelProperty("task name")
+    @Schema(description = "task name")
     @NotNull
     private String taskName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
-    @ApiModelProperty("execution date")
+    @Schema(description = "execution date")
     @NotNull
     private Date executionDate;
 
-    @ApiModelProperty("try number")
+    @Schema(description = "try number")
     private Integer tryNumber;
 
     public JobDetailRequest() {

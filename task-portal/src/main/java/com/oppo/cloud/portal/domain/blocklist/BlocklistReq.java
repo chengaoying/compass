@@ -16,8 +16,8 @@
 
 package com.oppo.cloud.portal.domain.blocklist;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -25,26 +25,26 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
-@ApiModel("Query blocklist request")
+@Schema(name = "Query blocklist request")
 public class BlocklistReq {
 
-    @ApiModelProperty(value = "component: flink or spark")
+    @Schema(description = "component: flink or spark")
     private String component;
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "page number")
+    @Schema(description = "page number")
     @Min(value = 1, message = "page page is more than 0")
     @NotNull(message = "page is not empty")
     private Integer page = 1;
 
-    @ApiModelProperty(value = "page size")
+    @Schema(description = "page size")
     @NotNull(message = "pageSize is not empty")
     @Max(value = 500, message = "pageSize less than 500")
     private Integer pageSize = 10;

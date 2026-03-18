@@ -17,26 +17,26 @@
 package com.oppo.cloud.portal.domain.diagnose;
 
 import com.oppo.cloud.portal.domain.base.Conclusion;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel("Item")
+@Schema(name = "Item")
 public class Item<T> {
 
-    @ApiModelProperty(value = "name")
+    @Schema(description = "name")
     private String name;
 
-    @ApiModelProperty("conclusion")
+    @Schema(description = "conclusion")
     private Conclusion conclusion;
 
-    @ApiModelProperty("item content")
+    @Schema(description = "item content")
     private T item;
 
-    @ApiModelProperty("error")
+    @Schema(description = "error")
     private String error;
 
-    @ApiModelProperty("type")
+    @Schema(description = "type")
     private String type;
 }

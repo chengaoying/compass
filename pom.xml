@@ -61,7 +61,7 @@
         <log4j.version>2.17.2</log4j.version>
         <spring-kafka.version>2.9.0</spring-kafka.version>
         <mockito.version>4.3.1</mockito.version>
-        <swagger.version>3.0.0</swagger.version>
+        <springdoc.version>2.5.0</springdoc.version>
         <spotless.version>2.27.2</spotless.version>
         <opensearch.version>2.13.0</opensearch.version>
         <java-jwt.version>4.2.2</java-jwt.version>
@@ -135,9 +135,9 @@
             </dependency>
 
             <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-boot-starter</artifactId>
-                <version>${swagger.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
 
             <dependency>

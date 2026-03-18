@@ -17,7 +17,7 @@
 package com.oppo.cloud.common.domain.opensearch;
 
 import com.oppo.cloud.common.util.DateUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -28,49 +28,49 @@ import java.util.*;
 @Data
 public class LogSummary extends OpenSearchInfo {
 
-    @ApiModelProperty(value = "applicationId")
+    @Schema(description = "applicationId")
     private String applicationId;
 
-    @ApiModelProperty(value = "log type")
+    @Schema(description = "log type")
     private String logType;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "execution date")
+    @Schema(description = "execution date")
     private Date executionDate;
 
-    @ApiModelProperty(value = "retry times")
+    @Schema(description = "retry times")
     private Integer retryTimes;
 
-    @ApiModelProperty(value = "action type")
+    @Schema(description = "action type")
     private String action;
 
-    @ApiModelProperty(value = "step")
+    @Schema(description = "step")
     private Integer step;
 
-    @ApiModelProperty(value = "group names")
+    @Schema(description = "group names")
     private List<String> groupNames;
 
-    @ApiModelProperty(value = "raw log")
+    @Schema(description = "raw log")
     private String rawLog;
 
-    @ApiModelProperty(value = "log path")
+    @Schema(description = "log path")
     private String logPath;
 
-    @ApiModelProperty(value = "group data")
+    @Schema(description = "group data")
     private Map<String, String> groupData;
 
-    @ApiModelProperty(value = "log timestamp")
+    @Schema(description = "log timestamp")
     private Integer logTimestamp;
 
-    @ApiModelProperty(value = "advice")
+    @Schema(description = "advice")
     private String advice;
 
     public Map<String, Object> genDoc() throws Exception {

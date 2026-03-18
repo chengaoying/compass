@@ -16,18 +16,18 @@
 
 package com.oppo.cloud.portal.domain.diagnose.resources;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel("SparkConfig")
+@Schema(name = "SparkConfig")
 public class SparkConfig {
 
-    @ApiModelProperty(value = "driver memory")
+    @Schema(description = "driver memory")
     private double sparkDriverMemory;
 
-    @ApiModelProperty(value = "executor memory")
+    @Schema(description = "executor memory")
     private double sparkExecutorMemory;
 
     public SparkConfig(double sparkDriverMemory, double sparkExecutorMemory) {

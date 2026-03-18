@@ -16,7 +16,7 @@
 
 package com.oppo.cloud.common.domain.job;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -26,42 +26,42 @@ import java.util.Set;
 @Data
 public class Datum {
 
-    @ApiModelProperty(value = "Node")
+    @Schema(description = "Node")
     Set<Node> nodeList;
 
-    @ApiModelProperty(value = "Edge")
+    @Schema(description = "Edge")
     List<Verge> vergeList;
 
     @Data
     public static class Node {
 
-        @ApiModelProperty(value = "Task id")
+        @Schema(description = "Task id")
         private Integer id;
-        @ApiModelProperty(value = "Task name")
+        @Schema(description = "Task name")
         private String taskName;
-        @ApiModelProperty(value = "Flow name")
+        @Schema(description = "Flow name")
         private String flowName;
-        @ApiModelProperty(value = "Project name")
+        @Schema(description = "Project name")
         private String projectName;
-        @ApiModelProperty(value = "Task start time")
+        @Schema(description = "Task start time")
         private String startTime;
-        @ApiModelProperty(value = "Task end time")
+        @Schema(description = "Task end time")
         private String endTime;
-        @ApiModelProperty(value = "Execution Date")
+        @Schema(description = "Execution Date")
         private String executionDate;
-        @ApiModelProperty(value = "Task execution time consumption")
+        @Schema(description = "Task execution time consumption")
         private String duration;
-        @ApiModelProperty(value = "Baseline for execution time consumption")
+        @Schema(description = "Baseline for execution time consumption")
         private String durationBaseLine;
-        @ApiModelProperty(value = "Baseline for completion time")
+        @Schema(description = "Baseline for completion time")
         private String endTimeBaseLine;
-        @ApiModelProperty(value = "Whether the completion time is abnormal")
+        @Schema(description = "Whether the completion time is abnormal")
         private Boolean endTimeAbnormal = false;
-        @ApiModelProperty(value = "Whether the execution time is abnormal")
+        @Schema(description = "Whether the execution time is abnormal")
         private Boolean durationAbnormal = false;
-        @ApiModelProperty(value = "Time period of task execution")
+        @Schema(description = "Time period of task execution")
         private String period;
-        @ApiModelProperty(value = "Task state")
+        @Schema(description = "Task state")
         private String taskState;
 
         // Duplicate
@@ -89,10 +89,10 @@ public class Datum {
     @Data
     public static class Verge {
 
-        @ApiModelProperty(value = "Upstream task")
+        @Schema(description = "Upstream task")
         private Integer upstream;
 
-        @ApiModelProperty(value = "Downstream task")
+        @Schema(description = "Downstream task")
         private Integer downStream;
 
         public Verge(Integer upstream, Integer downStream) {

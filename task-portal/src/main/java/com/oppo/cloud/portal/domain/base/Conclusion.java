@@ -16,18 +16,18 @@
 
 package com.oppo.cloud.portal.domain.base;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 @Data
-@ApiModel("Conclusion of analysis")
+@Schema(name = "Conclusion of analysis")
 public class Conclusion {
 
-    @ApiModelProperty(value = "conclusion")
+    @Schema(description = "conclusion")
     private String conclusion;
 
-    @ApiModelProperty(value = "description")
+    @Schema(description = "description")
     private String conclusionDesc;
 
     public Conclusion() {

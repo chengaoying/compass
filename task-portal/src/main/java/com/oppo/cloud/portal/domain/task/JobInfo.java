@@ -24,8 +24,8 @@ import com.oppo.cloud.common.domain.opensearch.SimpleUser;
 import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.portal.util.MessageSourceUtil;
 import com.oppo.cloud.portal.util.TaskUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,59 +34,59 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@ApiModel(value = "Job information")
+@Schema(name = "Job information")
 @NoArgsConstructor
 public class JobInfo {
 
     @JsonIgnore
     private String Id;
 
-    @ApiModelProperty(value = "users")
+    @Schema(description = "users")
     private String users;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "execution date")
+    @Schema(description = "execution date")
     private String executionDate;
 
-    @ApiModelProperty(value = "start time")
+    @Schema(description = "start time")
     private String startTime;
 
-    @ApiModelProperty(value = "end time")
+    @Schema(description = "end time")
     private String endTime;
 
-    @ApiModelProperty(value = "duration")
+    @Schema(description = "duration")
     private String duration;
 
-    @ApiModelProperty(value = "task state")
+    @Schema(description = "task state")
     private String taskState;
 
-    @ApiModelProperty(value = "categories")
+    @Schema(description = "categories")
     private List<String> categories;
 
-    @ApiModelProperty(value = "resource")
+    @Schema(description = "resource")
     private String resource;
 
-    @ApiModelProperty(value = "try number")
+    @Schema(description = "try number")
     private Integer tryNumber;
 
-    @ApiModelProperty(value = "Others")
+    @Schema(description = "Others")
     private List<String> Others;
 
-    @ApiModelProperty(value = "task processing status: unprocessed (0), processed (1)")
+    @Schema(description = "task processing status: unprocessed (0), processed (1)")
     private Integer taskStatus;
 
-    @ApiModelProperty(value = "create time")
+    @Schema(description = "create time")
     private String createTime;
 
-    @ApiModelProperty(value = "update time")
+    @Schema(description = "update time")
     private String updateTime;
 
     public static JobInfo from(JobAnalysis jobAnalysis, Object stateCache) {

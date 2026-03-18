@@ -17,8 +17,8 @@
 package com.oppo.cloud.common.domain.opensearch;
 
 import com.oppo.cloud.common.util.DateUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,88 +27,88 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 @Data
-@ApiModel("all abnormal job instance info will save in this index of es")
+@Schema(name = "all abnormal job instance info will save in this index of es")
 public class JobAnalysis extends OpenSearchInfo {
 
-    @ApiModelProperty(value = "users")
+    @Schema(description = "users")
     private List<SimpleUser> users;
 
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
-    @ApiModelProperty(value = "project Id")
+    @Schema(description = "project Id")
     private Integer projectId;
 
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "flow Id")
+    @Schema(description = "flow Id")
     private Integer flowId;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     private String taskName;
 
-    @ApiModelProperty(value = "task Id")
+    @Schema(description = "task Id")
     private Integer taskId;
 
-    @ApiModelProperty(value = "execution date")
+    @Schema(description = "execution date")
     private Date executionDate;
 
-    @ApiModelProperty(value = "start time")
+    @Schema(description = "start time")
     private Date startTime;
 
-    @ApiModelProperty(value = "end time")
+    @Schema(description = "end time")
     private Date endTime;
 
-    @ApiModelProperty(value = "duration")
+    @Schema(description = "duration")
     private Double duration;
 
-    @ApiModelProperty(value = "task state")
+    @Schema(description = "task state")
     private String taskState;
 
-    @ApiModelProperty(value = "memory·seconds")
+    @Schema(description = "memory·seconds")
     private Double memorySeconds;
 
-    @ApiModelProperty(value = "vcore·seconds")
+    @Schema(description = "vcore·seconds")
     private Double vcoreSeconds;
 
-    @ApiModelProperty(value = "task type")
+    @Schema(description = "task type")
     private String taskType;
 
-    @ApiModelProperty(value = "retry times")
+    @Schema(description = "retry times")
     private Integer retryTimes;
 
-    @ApiModelProperty(value = "categories")
+    @Schema(description = "categories")
     private List<String> categories;
 
-    @ApiModelProperty(value = "baseline duration")
+    @Schema(description = "baseline duration")
     private String durationBaseline;
 
-    @ApiModelProperty(value = "baseline end time")
+    @Schema(description = "baseline end time")
     private String endTimeBaseline;
 
-    @ApiModelProperty(value = "last successful time(Long-term failed task)")
+    @Schema(description = "last successful time(Long-term failed task)")
     private String successExecutionDay;
 
-    @ApiModelProperty(value = "days since the last success(Long-term failed task)")
+    @Schema(description = "days since the last success(Long-term failed task)")
     private String successDays;
 
-    @ApiModelProperty(value = "task used memory(Memory overflow warning)")
+    @Schema(description = "task used memory(Memory overflow warning)")
     private Double memory;
 
-    @ApiModelProperty(value = "memory usage ratio(Memory overflow warning)")
+    @Schema(description = "memory usage ratio(Memory overflow warning)")
     private Double memoryRatio;
 
-    @ApiModelProperty(value = "task deletion status: not deleted (0), deleted (1)")
+    @Schema(description = "task deletion status: not deleted (0), deleted (1)")
     private Integer deleted = 0;
 
-    @ApiModelProperty(value = "task processing status: unprocessed (0), processed (1)")
+    @Schema(description = "task processing status: unprocessed (0), processed (1)")
     private Integer taskStatus = 0;
 
-    @ApiModelProperty(value = "create time")
+    @Schema(description = "create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "update time")
+    @Schema(description = "update time")
     private Date updateTime;
 
     public Map<String, Object> genDoc() throws Exception {

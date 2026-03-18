@@ -16,8 +16,8 @@
 
 package com.oppo.cloud.portal.domain.diagnose.runtime.base;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -25,12 +25,12 @@ import java.util.List;
 
 
 @Data
-@ApiModel("Metric information")
+@Schema(name = "Metric information")
 public class MetricInfo {
 
-    @ApiModelProperty(value = "X-axis value")
+    @Schema(description = "X-axis value")
     private String xValue;
 
-    @ApiModelProperty(value = "Metric value (the same X-axis corresponds to multiple Y values)")
+    @Schema(description = "Metric value (the same X-axis corresponds to multiple Y values)")
     private List<ValueInfo> yValues = new ArrayList<>();
 }

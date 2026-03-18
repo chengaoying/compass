@@ -16,50 +16,50 @@
 
 package com.oppo.cloud.common.domain.gc;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 
 @Data
-@ApiModel("Memory analysis.")
+@Schema(name = "Memory analysis.")
 public class MemoryAnalyze {
 
     /**
      * appId
      */
-    @ApiModelProperty(value = "appId")
+    @Schema(description = "appId")
     private String applicationId;
     /**
      * oflow task id
      */
-    @ApiModelProperty(value = "oflow task id")
+    @Schema(description = "oflow task id")
     private String oflowTaskId;
     /**
      * oflow dag id
      */
-    @ApiModelProperty(value = "oflow dag id")
+    @Schema(description = "oflow dag id")
     private String dagId;
     /**
      * execution date
      */
-    @ApiModelProperty(value = "execution date")
+    @Schema(description = "execution date")
     private Integer executionDate;
     /**
      * Zone
      */
-    @ApiModelProperty(value = "zone")
+    @Schema(description = "zone")
     private String zone;
     /**
      * Log type: driver executor
      */
-    @ApiModelProperty(value = "Log type: driver executor")
+    @Schema(description = "Log type: driver executor")
     private String logType;
     /**
      * Executor's memory usage.
      */
-    @ApiModelProperty(value = "Executor's memory usage.")
+    @Schema(description = "Executor's memory usage.")
     private List<ExecutorPeakMemory> executorPeakMemoryList;
 }

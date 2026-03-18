@@ -23,10 +23,11 @@ import com.oppo.cloud.common.util.DateUtil;
 import com.oppo.cloud.portal.domain.diagnose.Item;
 import com.oppo.cloud.portal.domain.task.*;
 import com.oppo.cloud.portal.service.JobService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +41,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/v1/job")
-@Api(value = "JobController", description = "job interface")
+@Tag(name = "JobController", description = "job interface")
 @Slf4j
 public class JobController {
 
@@ -54,7 +55,7 @@ public class JobController {
      * @return
      */
     @PostMapping(value = "/list")
-    @ApiOperation(value = "Job list", httpMethod = "POST")
+    @Operation(summary = "Job list")
     @ResponseBody
     public CommonStatus<?> searchJobs(@Validated @RequestBody JobsRequest request) throws Exception {
         return CommonStatus.success(jobService.searchJobs(request));
@@ -66,12 +67,12 @@ public class JobController {
      * @return
      */
     @GetMapping(value = "/apps")
-    @ApiOperation(value = "App list", httpMethod = "GET")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "taskName", value = "taskName", dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "flowName", value = "dagId", dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "projectName", value = "projectName", dataType = "String", dataTypeClass = String.class),
-            @ApiImplicitParam(name = "executionDate", value = "executionDate", dataType = "String", dataTypeClass = String.class)
+    @Operation(summary = "App list")
+    @Parameters({
+            @Parameter(name = "taskName", description = "taskName"),
+            @Parameter(name = "flowName", description = "dagId"),
+            @Parameter(name = "projectName", description = "projectName"),
+            @Parameter(name = "executionDate", description = "executionDate")
     })
     public CommonStatus<?> searchJobs(@RequestParam(value = "taskName") String taskName,
                                                    @RequestParam(value = "flowName") String flowName,
@@ -85,14 +86,14 @@ public class JobController {
     }
 
     @PostMapping(value = "/summary")
-    @ApiOperation(value = "diagnosis summary")
+    @Operation(summary = "diagnosis summary")
     public CommonStatus<?> getTaskSummary(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         List<String> res = jobService.searchJobDiagnose(jobDetailRequest);
         return CommonStatus.success(res);
     }
 
     @PostMapping(value = "/jobDiagnoseInfo")
-    @ApiOperation(value = "job diagnosis information")
+    @Operation(summary = "job diagnosis information")
     public CommonStatus<?> getJobDiagnoseInfo(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         List<Item> res = new ArrayList<>();
         res.add(jobService.searchDurationTrend(jobDetailRequest));
@@ -102,19 +103,19 @@ public class JobController {
     }
 
     @PostMapping(value = "/appDiagnoseInfo")
-    @ApiOperation(value = "application diagnosis information")
+    @Operation(summary = "application diagnosis information")
     public CommonStatus<?> getAppDiagnoseInfo(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         return CommonStatus.success(jobService.searchAppDiagnoseInfo(jobDetailRequest));
     }
 
     @PostMapping(value = "/graph")
-    @ApiOperation(value = "job graph")
+    @Operation(summary = "job graph")
     public CommonStatus<?> getGraph(@Validated @RequestBody JobsRequest request) throws Exception {
         return CommonStatus.success(jobService.getGraph(request));
     }
 
     @GetMapping(value = "/categories")
-    @ApiOperation(value = "app category type")
+    @Operation(summary = "app category type")
     public CommonStatus<?> getCategories() {
         List<String> res = new ArrayList<>();
         res.addAll(JobCategoryEnum.getAllLangMsg());
@@ -123,7 +124,7 @@ public class JobController {
     }
 
     @PostMapping(value = "/updateState")
-    @ApiOperation(value = "update status of job", httpMethod = "POST")
+    @Operation(summary = "update status of job")
     @ResponseBody
     public CommonStatus<?> updateTaskState(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         jobService.updateJobState(jobDetailRequest);
@@ -132,21 +133,21 @@ public class JobController {
 
     @Deprecated
     @PostMapping(value = "/log")
-    @ApiOperation(value = "exception analysis")
+    @Operation(summary = "exception analysis")
     public CommonStatus<?> getExceptionLogs(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         return CommonStatus.success(jobService.searchLogInfo(jobDetailRequest));
     }
 
     @Deprecated
     @PostMapping(value = "/durationTrend")
-    @ApiOperation(value = "time-consuming trend of runtime")
+    @Operation(summary = "time-consuming trend of runtime")
     public CommonStatus<?> getHistoryData(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         return CommonStatus.success(jobService.searchDurationTrend(jobDetailRequest));
     }
 
     @Deprecated
     @PostMapping(value = "/baseline")
-    @ApiOperation(value = "baseline detail of a job")
+    @Operation(summary = "baseline detail of a job")
     public CommonStatus<?> getBaseline(@RequestBody JobDetailRequest jobDetailRequest) throws Exception {
         return CommonStatus.success(jobService.searchJobDatum(jobDetailRequest));
     }

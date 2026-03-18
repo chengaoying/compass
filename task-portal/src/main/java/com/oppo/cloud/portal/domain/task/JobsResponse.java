@@ -16,19 +16,19 @@
 
 package com.oppo.cloud.portal.domain.task;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-@ApiModel(value = "Jobs Response")
+@Schema(name = "Jobs Response")
 public class JobsResponse {
 
-    @ApiModelProperty(value = "job information")
+    @Schema(description = "job information")
     private List<JobInfo> jobInfos;
 
-    @ApiModelProperty(value = "count")
+    @Schema(description = "count")
     private Long count;
 }

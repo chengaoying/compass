@@ -20,17 +20,17 @@ import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.Table;
 import com.oppo.cloud.portal.domain.log.LogInfo;
 import com.oppo.cloud.portal.util.MessageSourceUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.LinkedHashMap;
 
 @Data
-@ApiModel("RunError information")
+@Schema(name = "RunError information")
 public class RunError extends IsAbnormal {
 
-    @ApiModelProperty("abnormal log information")
+    @Schema(description = "abnormal log information")
     private Table<LogInfo> table = new Table<>();
 
     public RunError() {

@@ -16,7 +16,7 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -25,36 +25,36 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TaskDiagnosisAdvice implements Serializable {
-    @ApiModelProperty(value = "id")
+    @Schema(description = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "Log type")
+    @Schema(description = "Log type")
     private String logType;
 
-    @ApiModelProperty(value = "Parent node exception event")
+    @Schema(description = "Parent node exception event")
     private String parentAction;
 
-    @ApiModelProperty(value = "Exceptional event")
+    @Schema(description = "Exceptional event")
     private String action;
 
-    @ApiModelProperty(value = "Exceptional description")
+    @Schema(description = "Exceptional description")
     private String description;
 
-    @ApiModelProperty(value = "Variable name list ( , is the delimiter)")
+    @Schema(description = "Variable name list ( , is the delimiter)")
     private String variables;
 
-    @ApiModelProperty(value = "Exception type")
+    @Schema(description = "Exception type")
     private String category;
 
-    @ApiModelProperty(value = "Is deleted")
+    @Schema(description = "Is deleted")
     private Integer deleted;
 
     private String normalAdvice;
 
-    @ApiModelProperty(value = "Advice (variables are represented by {variable name})")
+    @Schema(description = "Advice (variables are represented by {variable name})")
     private String abnormalAdvice;
 
-    @ApiModelProperty(value = "Matching rule")
+    @Schema(description = "Matching rule")
     private String rule;
 
     private static final long serialVersionUID = 1L;

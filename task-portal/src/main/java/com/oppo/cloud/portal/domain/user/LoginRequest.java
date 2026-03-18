@@ -16,7 +16,7 @@
 
 package com.oppo.cloud.portal.domain.user;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,11 +32,11 @@ import javax.validation.constraints.NotEmpty;
 public class LoginRequest {
 
     @NotBlank
-    @ApiModelProperty(value = "username")
+    @Schema(description = "username")
     private String username;
 
     @NotEmpty
-    @ApiModelProperty(value = "password")
+    @Schema(description = "password")
     private String password;
 
 }

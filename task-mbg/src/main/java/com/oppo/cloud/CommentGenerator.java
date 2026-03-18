@@ -33,7 +33,7 @@ public class CommentGenerator extends DefaultCommentGenerator {
 
     private static final String MODEL_QUERY_CLASS = "Example";
     private static final String MAPPER_CLASS = "Mapper";
-    private static final String API_IMPORT_CLASS = "io.swagger.annotations.ApiModelProperty";
+    private static final String API_IMPORT_CLASS = "io.swagger.v3.oas.annotations.media.Schema";
 
     /**
      * Set configuration parameters
@@ -57,7 +57,7 @@ public class CommentGenerator extends DefaultCommentGenerator {
         // The database special character " conflicts with Java character syntax when generating code comments and is replaced with '
         remarks = remarks.replace("\"", "'");
         // Database fields generate entity model classes and add swagger annotations
-        field.addJavaDocLine("@ApiModelProperty(value = \"" + remarks + "\")");
+        field.addJavaDocLine("@Schema(description = \"" + remarks + "\")");
     }
 
     /**

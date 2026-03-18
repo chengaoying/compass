@@ -18,7 +18,7 @@ package com.oppo.cloud.portal.domain.report;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.oppo.cloud.common.util.DateUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -31,16 +31,16 @@ import java.util.Map;
 @Data
 public class ReportRequest {
 
-    @ApiModelProperty(value = "project Name")
+    @Schema(description = "project Name")
     private String projectName;
 
-    @ApiModelProperty(value = "start timestamp")
+    @Schema(description = "start timestamp")
     private Long start;
 
-    @ApiModelProperty(value = "end timestamp")
+    @Schema(description = "end timestamp")
     private Long end;
 
-    @ApiModelProperty(value = "trend graph type, Optional：cpuTrend, memoryTrend, numTrend, " +
+    @Schema(description = "trend graph type, Optional：cpuTrend, memoryTrend, numTrend, " +
             "distribution(resource/number)")
     private String graphType;
 

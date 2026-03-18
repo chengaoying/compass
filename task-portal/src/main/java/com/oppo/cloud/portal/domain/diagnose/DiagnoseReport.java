@@ -20,8 +20,8 @@ import com.oppo.cloud.portal.domain.diagnose.info.AppInfo;
 import com.oppo.cloud.portal.domain.diagnose.info.ClusterInfo;
 import com.oppo.cloud.portal.domain.diagnose.info.TaskInfo;
 import com.oppo.cloud.portal.domain.diagnose.runerror.RunError;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -29,34 +29,34 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@ApiModel("DiagnoseReport")
+@Schema(name = "DiagnoseReport")
 public class DiagnoseReport {
 
-    @ApiModelProperty("run information")
+    @Schema(description = "run information")
     private RunInfo runInfo;
 
-    @ApiModelProperty("run error")
+    @Schema(description = "run error")
     private List<Item<RunError>> runErrorAnalyze = new ArrayList<>();
 
-    @ApiModelProperty("resources")
+    @Schema(description = "resources")
     private List<Item> resourcesAnalyze = new ArrayList<>();
 
-    @ApiModelProperty("run time")
+    @Schema(description = "run time")
     private List<Item> runTimeAnalyze = new ArrayList<>();
 
     @Data
     public static class RunInfo {
 
-        @ApiModelProperty("task information")
+        @Schema(description = "task information")
         private TaskInfo taskInfo;
 
-        @ApiModelProperty("cluster information")
+        @Schema(description = "cluster information")
         private ClusterInfo clusterInfo;
 
-        @ApiModelProperty("app parameter")
+        @Schema(description = "app parameter")
         private Map<String, Object> env;
 
-        @ApiModelProperty("error information")
+        @Schema(description = "error information")
         private String error;
     }
 

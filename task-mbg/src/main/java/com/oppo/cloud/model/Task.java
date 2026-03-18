@@ -16,46 +16,46 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Task implements Serializable {
 
-    @ApiModelProperty(value = "task id")
+    @Schema(description = "task id")
     private Integer id;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Project id")
+    @Schema(description = "Project id")
     private Integer projectId;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Flow id")
+    @Schema(description = "Flow id")
     private Integer flowId;
 
-    @ApiModelProperty(value = "Task name")
+    @Schema(description = "Task name")
     private String taskName;
 
-    @ApiModelProperty(value = "Description")
+    @Schema(description = "Description")
     private String description;
 
-    @ApiModelProperty(value = "Task creator id")
+    @Schema(description = "Task creator id")
     private Integer userId;
 
-    @ApiModelProperty(value = "Task type: SHELL, PYTHON, SPARK")
+    @Schema(description = "Task type: SHELL, PYTHON, SPARK")
     private String taskType;
 
-    @ApiModelProperty(value = "Number of failed retries")
+    @Schema(description = "Number of failed retries")
     private Integer retries;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;

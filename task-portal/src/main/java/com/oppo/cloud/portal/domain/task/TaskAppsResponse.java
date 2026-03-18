@@ -16,20 +16,20 @@
 
 package com.oppo.cloud.portal.domain.task;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ApiModel(value = "Applications Response")
+@Schema(name = "Applications Response")
 public class TaskAppsResponse {
 
-    @ApiModelProperty(value = "application list")
+    @Schema(description = "application list")
     private List<TaskAppInfo> taskApps = new ArrayList<>();
 
-    @ApiModelProperty(value = "count")
+    @Schema(description = "count")
     private Long count;
 }

@@ -16,37 +16,37 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class Blocklist implements Serializable {
 
-    @ApiModelProperty(value = "Block list id")
+    @Schema(description = "Block list id")
     private Integer id;
 
-    @ApiModelProperty(value = "Component(Spark, Flink etc)")
+    @Schema(description = "Component(Spark, Flink etc)")
     private String component;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Task name")
+    @Schema(description = "Task name")
     private String taskName;
 
-    @ApiModelProperty(value = "Username")
+    @Schema(description = "Username")
     private String username;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
-    @ApiModelProperty(value = "Is deleted")
+    @Schema(description = "Is deleted")
     private Integer deleted;
 
     private static final long serialVersionUID = 1L;

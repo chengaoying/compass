@@ -16,54 +16,54 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class TaskInstance implements Serializable {
-    @ApiModelProperty(value = "Task instance id")
+    @Schema(description = "Task instance id")
     private Integer id;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Task name")
+    @Schema(description = "Task name")
     private String taskName;
 
-    @ApiModelProperty(value = "Task execution cycle")
+    @Schema(description = "Task execution cycle")
     private Date executionTime;
 
-    @ApiModelProperty(value = "Task start time")
+    @Schema(description = "Task start time")
     private Date startTime;
 
-    @ApiModelProperty(value = "Task end time")
+    @Schema(description = "Task end time")
     private Date endTime;
 
-    @ApiModelProperty(value = "Task state")
+    @Schema(description = "Task state")
     private String taskState;
 
-    @ApiModelProperty(value = "Task type")
+    @Schema(description = "Task type")
     private String taskType;
 
-    @ApiModelProperty(value = "Task retry nth time")
+    @Schema(description = "Task retry nth time")
     private Integer retryTimes;
 
-    @ApiModelProperty(value = "Maximum number of retries for task execution")
+    @Schema(description = "Maximum number of retries for task execution")
     private Integer maxRetryTimes;
 
-    @ApiModelProperty(value = "The work group where the task is executed")
+    @Schema(description = "The work group where the task is executed")
     private String workerGroup;
 
-    @ApiModelProperty(value = "Task trigger type: manual (manual trigger), schedule (scheduled trigger)")
+    @Schema(description = "Task trigger type: manual (manual trigger), schedule (scheduled trigger)")
     private String triggerType;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Update time")
+    @Schema(description = "Update time")
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;

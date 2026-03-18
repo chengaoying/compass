@@ -19,8 +19,8 @@ package com.oppo.cloud.portal.domain.diagnose.runtime;
 import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.Table;
 import com.oppo.cloud.portal.util.MessageSourceUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.LinkedHashMap;
@@ -28,10 +28,10 @@ import java.util.Map;
 
 
 @Data
-@ApiModel("Big table scan information")
+@Schema(name = "Big table scan information")
 public class BigTableScan extends IsAbnormal {
 
-    @ApiModelProperty(value = "table information")
+    @Schema(description = "table information")
     private Table<TaskInfo> table = new Table<>();
 
     public BigTableScan() {
@@ -45,13 +45,13 @@ public class BigTableScan extends IsAbnormal {
     @Data
     public static class TaskInfo {
 
-        @ApiModelProperty(value = "hive table info")
+        @Schema(description = "hive table info")
         private String hiveTable;
 
-        @ApiModelProperty(value = "columns")
+        @Schema(description = "columns")
         private String columns;
 
-        @ApiModelProperty(value = "threshold")
+        @Schema(description = "threshold")
         private String threshold;
     }
 }

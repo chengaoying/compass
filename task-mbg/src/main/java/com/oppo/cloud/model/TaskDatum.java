@@ -16,31 +16,31 @@
 
 package com.oppo.cloud.model;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Date;
 
 public class TaskDatum implements Serializable {
 
-    @ApiModelProperty(value = "id")
+    @Schema(description = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "Project name")
+    @Schema(description = "Project name")
     private String projectName;
 
-    @ApiModelProperty(value = "Flow name")
+    @Schema(description = "Flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "Task name")
+    @Schema(description = "Task name")
     private String taskName;
 
-    @ApiModelProperty(value = "Execution cycle")
+    @Schema(description = "Execution cycle")
     private Date executionDate;
 
-    @ApiModelProperty(value = "Create time")
+    @Schema(description = "Create time")
     private Date createTime;
 
-    @ApiModelProperty(value = "Baseline tree")
+    @Schema(description = "Baseline tree")
     private String baseline;
 
     private static final long serialVersionUID = 1L;

@@ -16,26 +16,26 @@
 
 package com.oppo.cloud.portal.domain.blocklist;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
-@ApiModel("Add Blocklist request")
+@Schema(name = "Add Blocklist request")
 public class BlocklistAddReq {
 
-    @ApiModelProperty(value = "component: spark or flink")
+    @Schema(description = "component: spark or flink")
     private String component;
-    @ApiModelProperty(value = "project name")
+    @Schema(description = "project name")
     private String projectName;
 
     @NotBlank(message = "flowName is not empty")
-    @ApiModelProperty(value = "flow name")
+    @Schema(description = "flow name")
     private String flowName;
 
-    @ApiModelProperty(value = "task name")
+    @Schema(description = "task name")
     @NotBlank(message = "taskName is not empty")
     private String taskName;
 

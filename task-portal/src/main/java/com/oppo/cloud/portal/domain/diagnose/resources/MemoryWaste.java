@@ -19,33 +19,33 @@ package com.oppo.cloud.portal.domain.diagnose.resources;
 import com.oppo.cloud.portal.domain.diagnose.Chart;
 import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.runtime.base.MetricInfo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@ApiModel("MemoryWaste Information")
+@Schema(name = "MemoryWaste Information")
 public class MemoryWaste extends IsAbnormal {
 
-    @ApiModelProperty(value = "chat list")
+    @Schema(description = "chat list")
     private List<Chart<MetricInfo>> chartList = new ArrayList<>();
 
-    @ApiModelProperty(value = "GC information")
+    @Schema(description = "GC information")
     private List<ComputeNode> computeNodeList;
 
     @Data
     public static class ComputeNode {
 
-        @ApiModelProperty(value = "executor Id")
+        @Schema(description = "executor Id")
         private Integer executorId;
 
-        @ApiModelProperty(value = "host name")
+        @Schema(description = "host name")
         private String hostName;
 
-        @ApiModelProperty(value = "node type(driver/executor)")
+        @Schema(description = "node type(driver/executor)")
         private String nodeType;
 
     }

@@ -19,7 +19,7 @@ package com.oppo.cloud.portal.domain.diagnose.runtime;
 import com.oppo.cloud.portal.domain.diagnose.IsAbnormal;
 import com.oppo.cloud.portal.domain.diagnose.Table;
 import com.oppo.cloud.portal.util.MessageSourceUtil;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ import java.util.Map;
 @Data
 public class OOMWarn extends IsAbnormal {
 
-    @ApiModelProperty(value = "table information")
+    @Schema(description = "table information")
     private Table<BoardCastTable> table = new Table<>();
 
     public OOMWarn() {
@@ -42,13 +42,13 @@ public class OOMWarn extends IsAbnormal {
     @Data
     public static class BoardCastTable {
 
-        @ApiModelProperty(value = "hive table")
+        @Schema(description = "hive table")
         private String hiveTable;
 
-        @ApiModelProperty(value = "output of columns")
+        @Schema(description = "output of columns")
         private String outputOfColumns;
 
-        @ApiModelProperty(value = "memory usage")
+        @Schema(description = "memory usage")
         private String memoryUsed;
     }
 
