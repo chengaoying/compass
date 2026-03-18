@@ -73,8 +73,9 @@ abstract public class CommonService {
                             log.warn("table: {},queryForMap: {},", mapping.getTargetTable(), query, e);
                             try {
                                 TimeUnit.MILLISECONDS.sleep(300);
-                            } catch (Exception ee) {
-
+                            } catch (InterruptedException ie) {
+                                Thread.currentThread().interrupt();
+                                break;
                             }
                         }
                     }
