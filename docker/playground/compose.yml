@@ -14,8 +14,6 @@ services:
       - ./script/compass_postgresql.sql:/docker-entrypoint-initdb.d/compass_postgresql.sql
       - ./script/ds_postgresql.sql:/docker-entrypoint-initdb.d/ds_postgresql.sql
 
-  # ZooKeeper removed: Kafka now uses KRaft mode (built-in Raft, no external coordinator needed)
-
   kafka:
     image: bitnami/kafka:3.6.1
     profiles: ["dependencies"]
@@ -35,10 +33,6 @@ services:
     ports:
       - 9092:9092
 
-  # Redis cluster (3 nodes) replaced with single-node Redis.
-  # Cluster mode was only needed for Redis-as-queue (detect→parser handoff).
-  # After merging task-detect+task-parser into task-analyzer, Redis is used
-  # only for Portal query caching — single node is sufficient.
   redis:
     image: redis:7.2.1
     profiles: ["dependencies"]
@@ -46,19 +40,6 @@ services:
     hostname: redis
     ports:
       - 6379:6379
-
-  # elasticsearch:
-  #   image: elasticsearch:8.10.2
-  #   profiles: ["dependencies"]
-  #   environment:
-  #     ES_JAVA_OPTS: "-Xms512M -Xmx512M"
-  #     ES_PORT: 0.0.0.0:9200
-  #     discovery.type: single-node
-  #     xpack.security.enabled: false
-  #   container_name: elasticsearch
-  #   hostname: elasticsearch
-  #   ports:
-  #     - 9200:9200
 
   opensearch:
     image: opensearchproject/opensearch:2.13.0
@@ -75,41 +56,6 @@ services:
     hostname: opensearch
     ports:
       - 9200:9200
-
-
-  #  minio:
-  #    image: bitnami/minio:2023-debian-11
-  #    environment:
-  #      MINIO_ROOT_USER: minio
-  #      MINIO_ROOT_PASSWORD: minio_minio
-  #      MINIO_DEFAULT_BUCKETS: spark-bucket,iceberg-bucket
-  #    container_name: minio
-  #    hostname: minio
-  #    ports:
-  #      - 9000
-  #      - 9001:9001
-  #
-  #  metastore:
-  #    build:
-  #      context: ./dockerfiles
-  #      dockerfile: compass-playground-hadoop.Dockerfile
-  #      args:
-  #        AWS_JAVA_SDK_VERSION: ${AWS_JAVA_SDK_VERSION}
-  #        HADOOP_VERSION: ${HADOOP_VERSION}
-  #        HIVE_VERSION: ${HIVE_VERSION}
-  #        APACHE_MIRROR: ${APACHE_MIRROR}
-  #        MAVEN_MIRROR: ${MAVEN_MIRROR}
-  #    container_name: metastore
-  #    hostname: metastore
-  #    ports:
-  #      - 9083
-  #    volumes:
-  #      - ./conf/core-site.xml:/etc/hadoop/conf/core-site.xml
-  #      - ./conf/hive-site.xml:/etc/hive/conf/hive-site.xml
-  #    depends_on:
-  #      - minio
-  #      - postgres
-
 
   dolphinscheduler:
     build:

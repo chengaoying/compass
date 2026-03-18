@@ -40,7 +40,7 @@
         <druid.version>1.2.15</druid.version>
         <mybatis-generator.version>1.4.0</mybatis-generator.version>
         <mybatis.version>3.5.11</mybatis.version>
-        <mysql-connector.version>8.0.29</mysql-connector.version>
+        <mysql-connector.version>8.0.33</mysql-connector.version>
         <postgresql.version>42.6.0</postgresql.version>
         <spring-data-commons.version>2.4.5</spring-data-commons.version>
         <spring-dynamic-datasource.version>3.1.0</spring-dynamic-datasource.version>
@@ -153,10 +153,9 @@
             </dependency>
 
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql-connector.version}</version>
-                <scope>test</scope>
             </dependency>
 
             <dependency>
